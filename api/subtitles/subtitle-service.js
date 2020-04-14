@@ -14,10 +14,10 @@ const sendExtraction = (magnetLink) => {
     const body = { magnetLink, langTo: "pt", ignoreCache: false }
     sendExtractionRequest(body)
         .then(res => res.json())
-        .then(json => onExtractionDone(json._id, whenExtractionDone))    
+        .then(extraction => onExtractionDone(extraction, whenExtractionDone))
 }
 
-const onNotificationRecieve = async (data) => getLinks(data).map(sendExtraction)  
+const onNotificationRecieve = (data) => getLinks(data).map(sendExtraction)  
 
 const whenExtractionDone = ({body}) => {
     console.info('Evento de download completo recebido')

@@ -7,7 +7,14 @@ socket.on('connect', () => console.info('Socket conectado ao servidor'))
 
 socket.on('disconnect', () => console.info('Socket desconectado do servidor'))
 
-const onExtractionDone = (EXTRACTION_ID, callback) => socket.on(`${EXTRACTION_ID}_DONE`, callback)
+const onExtractionDone = (extraction, callback) => {
+    const {_id, subtitles} = extraction
+    if (subtitles && subtitles.length > 0) {
+        callback({body: extraction})
+    } else if (_id) {
+        socket.on(`${_id}_DONE`, callback)
+    }
+}
 
 module.exports = {
     onExtractionDone
