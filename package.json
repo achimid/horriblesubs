@@ -1,0 +1,30 @@
+{
+  "name": "horriblesubs",
+  "version": "1.0.0",
+  "description": "API to centralize animes subtitles and plugins from web site https://horriblesubs.info/",
+  "main": "index.js",
+  "scripts": {
+    "start": "node api/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/achimid/horriblesubs.git"
+  },
+  "author": "achimid",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/achimid/horriblesubs/issues"
+  },
+  "homepage": "https://github.com/achimid/horriblesubs#readme",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "http-status-codes": "^1.4.0",
+    "mongoose": "^5.9.2",
+    "node-cron": "^2.0.3",
+    "node-fetch": "^2.6.0",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0"
+  }
+}
