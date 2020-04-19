@@ -6,7 +6,7 @@ const URL = process.env.API_URL + process.env.API_PREFIX + process.env.API_VERSI
 
 // Keep API Alive
 if (process.env.KEEP_UP != 'false') {
-    log.info('Iniciando job healthcheck...')
+    console.info('Iniciando job healthcheck...')
     cron.schedule(process.env.CRON_TIME_DEFAULT , () => fetch(URL).then(() => console.info('ping...')))
 }
 
