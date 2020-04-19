@@ -14,7 +14,7 @@ const sendExtractionRequest = (body) => fetch(process.env.MKV_EXTRACT_API + proc
 const sendExtraction = (magnetLink) => {
     console.info('Enviando para extração...')
 
-    const body = { magnetLink, langsTo: langsToTranslateByDefault, ignoreCache: 'true' }
+    const body = { magnetLink, langsTo: langsToTranslateByDefault, ignoreCache: 'false' }
     sendExtractionRequest(body)
         .then(res => res.json())
         .then(extraction => onExtractionDone(extraction, whenExtractionDone))
