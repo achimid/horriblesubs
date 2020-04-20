@@ -1,7 +1,7 @@
 const getSpanSubtitle = (lang, id) => {
     const url = `http://localhost:9002/api/v1/subtitle/${id}/download`
-    const message = language == 'en' ? 'Subtitle - Original' : 'Subtitle - * Automatically translated (May have several mistakes)'
-    const mark = language == 'en' ? '' : '(*)'
+    const message = lang == 'en' ? 'Subtitle - Original' : 'Subtitle - * Automatically translated (May have several mistakes)'
+    const mark = lang == 'en' ? '' : '(*)'
     const language = languages[lang]
 
     return `
@@ -25,7 +25,7 @@ const getSubtitlesFromAPI = () => {
 
     const apiUrl = new URL('http://localhost:9002/api/v1/subtitle')
     const params = {
-        pageUrl: window.location.toString().split('#')
+        pageUrl: window.location.toString()
     }
 
     Object.keys(params).forEach(key => apiUrl.searchParams.append(key, params[key]))
@@ -33,15 +33,14 @@ const getSubtitlesFromAPI = () => {
     fetch(apiUrl)
         .then(data => data.json())
         .then((data) => data.subtitles.length > 0 ? setTimeout(loadSubtitles(data), 2000) : null)
+        // .then(loadSubtitles)
 }
 
 const loadSubtitles = (body) => () => {
-    debugger
     const subtitleGrouped = groupBy(body.subtitles, (s) => s.episode)
     const divsEpisodes = [...document.querySelectorAll('.rls-links-container')]
 
     Object.keys(subtitleGrouped).map(episode => {
-        debugger
         const divs = divsEpisodes.filter(el => el.parentNode.querySelector('strong').textContent == episode)
         if (divs && divs.length > 0) {
             const el = divs[0]

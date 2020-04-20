@@ -17,9 +17,9 @@
   "content_scripts": [
     {
       "js": ["background.js"],
-      "matches": ["*://horriblesubs.info/*"],
+      "matches": ["*://horriblesubs.info/shows*"],
       "match_about_blank": false,
-      "all_frames": true,
+      "all_frames": false,
       "run_at": "document_idle"
     }
   ]

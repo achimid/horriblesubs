@@ -53,10 +53,9 @@ const getAndParseSubtitlesBody = (b) => {
     return subtitles
 }
 
-const findSubtitle = (data) => {
-    console.info('Buscando legendas', data)
-
+const findByQuery = (data) => {
     const query = {
+        _id: data._id,
         name: data.name,
         episode: data.episode,
         magnetLink: data.magnetLink,
@@ -65,12 +64,17 @@ const findSubtitle = (data) => {
         language: data.language
     }
 
-    return SubtitleModel.find(query).exec()
+    Object.keys(query).forEach((key) => (query[key] == null) && delete query[key]);
+
+    return SubtitleModel.find(query).select('episode language name').sort('name episode language').lean()
 }
+
+const findById = (id) => SubtitleModel.findById(id).select('episode language name content fileName').lean()
 
 module.exports = {
     onNotificationRecieve,
-    findSubtitle
+    findByQuery,
+    findById
 }
 
 
