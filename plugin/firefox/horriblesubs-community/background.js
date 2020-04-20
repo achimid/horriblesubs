@@ -1,57 +1,165 @@
+const getSpanSubtitle = (lang, id) => {
+    const url = `http://localhost:9002/api/v1/subtitle/${id}/download`
+    const message = language == 'en' ? 'Subtitle - Original' : 'Subtitle - * Automatically translated (May have several mistakes)'
+    const mark = language == 'en' ? '' : '(*)'
+    const language = languages[lang]
 
-const getHtmlInject = () => {
+    return `
+        <span class="dl-type">
+            <a title="Download ${language} ${message}" href="${url}">
+                ${language} ${mark}
+            </a>
+        </span>
+    `
+}
+
+const getDivSubtitles = (content) => {
     return `
         <div class="rls-link" class="04-subs" data-epi="#nEpi#">
             <span class="rls-link-label">Subtitles:</span>
-            <span class="dl-type">
-                <a title="Download English Subtitle - Original" href="#">
-                    English
-                </a>
-            </span>|
-            <span class="dl-type">
-                <a title="Download Portuguese Subtitle - * Automatically translated (May have several mistakes)" href="#">
-                    Portuguese (*)
-                </a>
-            </span>|
-            <span class="dl-type">
-                <a title="Download Spanish Subtitle - * Automatically translated (May have several mistakes)" href="#">
-                    Spanish (*)
-                </a>
-            </span>|
-            <span class="dl-type">
-                <a title="Download French Subtitle - * Automatically translated (May have several mistakes)" href="#">
-                    French (*)
-                </a>
-            </span>|
-            <span class="dl-type">
-                <a title="Download Others Subtitle - * Automatically translated (May have several mistakes)" href="#">
-                    Others (*)
-                </a>
-            </span>
+           ${content}
         </div>`
 }
 
 const getSubtitlesFromAPI = () => {
+
     const apiUrl = new URL('http://localhost:9002/api/v1/subtitle')
     const params = {
-        url: window.location.toString().split('#')[0]
+        pageUrl: window.location.toString().split('#')
     }
 
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+    Object.keys(params).forEach(key => apiUrl.searchParams.append(key, params[key]))
 
     fetch(apiUrl)
         .then(data => data.json())
-        .then((data) => setTimeout(loadSubtitles(data), 2000))
+        .then((data) => data.subtitles.length > 0 ? setTimeout(loadSubtitles(data), 2000) : null)
 }
 
-const loadSubtitles = (data) => () => {
+const loadSubtitles = (body) => () => {
     debugger
-    console.log(data)
+    const subtitleGrouped = groupBy(body.subtitles, (s) => s.episode)
+    const divsEpisodes = [...document.querySelectorAll('.rls-links-container')]
 
-    // [...document.querySelectorAll('.rls-links-container')].map(el => {
-    //     el.innerHTML = el.innerHTML + htmlInject.replace('#nEpi#', el.parentNode.querySelector('strong').textContent)
-    // })    
+    Object.keys(subtitleGrouped).map(episode => {
+        debugger
+        const divs = divsEpisodes.filter(el => el.parentNode.querySelector('strong').textContent == episode)
+        if (divs && divs.length > 0) {
+            const el = divs[0]
+            const spans = subtitleGrouped[episode].map(sub => getSpanSubtitle(sub.language, sub._id))
+            el.innerHTML = el.innerHTML + getDivSubtitles(spans.join('|'))
+        }
+    })
 }
 
+function groupBy(xs, f) {
+    return xs.reduce((r, v, i, a, k = f(v)) => ((r[k] || (r[k] = [])).push(v), r), {});
+}
+
+const languages = {
+    'af': 'Afrikaans',
+    'sq': 'Albanian',
+    'am': 'Amharic',
+    'ar': 'Arabic',
+    'hy': 'Armenian',
+    'az': 'Azerbaijani',
+    'eu': 'Basque',
+    'be': 'Belarusian',
+    'bn': 'Bengali',
+    'bs': 'Bosnian',
+    'bg': 'Bulgarian',
+    'ca': 'Catalan',
+    'ceb': 'Cebuano',
+    'ny': 'Chichewa',
+    'zh-cn': 'Chinese Simplified',
+    'zh-tw': 'Chinese Traditional',
+    'co': 'Corsican',
+    'hr': 'Croatian',
+    'cs': 'Czech',
+    'da': 'Danish',
+    'nl': 'Dutch',
+    'en': 'English',
+    'eo': 'Esperanto',
+    'et': 'Estonian',
+    'tl': 'Filipino',
+    'fi': 'Finnish',
+    'fr': 'French',
+    'fy': 'Frisian',
+    'gl': 'Galician',
+    'ka': 'Georgian',
+    'de': 'German',
+    'el': 'Greek',
+    'gu': 'Gujarati',
+    'ht': 'Haitian Creole',
+    'ha': 'Hausa',
+    'haw': 'Hawaiian',
+    'iw': 'Hebrew',
+    'hi': 'Hindi',
+    'hmn': 'Hmong',
+    'hu': 'Hungarian',
+    'is': 'Icelandic',
+    'ig': 'Igbo',
+    'id': 'Indonesian',
+    'ga': 'Irish',
+    'it': 'Italian',
+    'ja': 'Japanese',
+    'jw': 'Javanese',
+    'kn': 'Kannada',
+    'kk': 'Kazakh',
+    'km': 'Khmer',
+    'ko': 'Korean',
+    'ku': 'Kurdish (Kurmanji)',
+    'ky': 'Kyrgyz',
+    'lo': 'Lao',
+    'la': 'Latin',
+    'lv': 'Latvian',
+    'lt': 'Lithuanian',
+    'lb': 'Luxembourgish',
+    'mk': 'Macedonian',
+    'mg': 'Malagasy',
+    'ms': 'Malay',
+    'ml': 'Malayalam',
+    'mt': 'Maltese',
+    'mi': 'Maori',
+    'mr': 'Marathi',
+    'mn': 'Mongolian',
+    'my': 'Myanmar (Burmese)',
+    'ne': 'Nepali',
+    'no': 'Norwegian',
+    'ps': 'Pashto',
+    'fa': 'Persian',
+    'pl': 'Polish',
+    'pt': 'Portuguese',
+    'ma': 'Punjabi',
+    'ro': 'Romanian',
+    'ru': 'Russian',
+    'sm': 'Samoan',
+    'gd': 'Scots Gaelic',
+    'sr': 'Serbian',
+    'st': 'Sesotho',
+    'sn': 'Shona',
+    'sd': 'Sindhi',
+    'si': 'Sinhala',
+    'sk': 'Slovak',
+    'sl': 'Slovenian',
+    'so': 'Somali',
+    'es': 'Spanish',
+    'su': 'Sundanese',
+    'sw': 'Swahili',
+    'sv': 'Swedish',
+    'tg': 'Tajik',
+    'ta': 'Tamil',
+    'te': 'Telugu',
+    'th': 'Thai',
+    'tr': 'Turkish',
+    'uk': 'Ukrainian',
+    'ur': 'Urdu',
+    'uz': 'Uzbek',
+    'vi': 'Vietnamese',
+    'cy': 'Welsh',
+    'xh': 'Xhosa',
+    'yi': 'Yiddish',
+    'yo': 'Yoruba',
+    'zu': 'Zulu'
+}
 
 getSubtitlesFromAPI()
