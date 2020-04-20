@@ -1,0 +1,27 @@
+{
+
+  "manifest_version": 2,
+  "name": "HorribleSubs Community",
+  "description": "Disponiviliza para download as legendas do episodio traduzida automaticamente. Plugin não oficial feito por um fã.",
+  "version": "1.0",
+
+  "icons": {
+    "48": "icons/if_source_code_103710.svg"
+  },
+
+  "permissions": [
+    "webRequest",
+    "<all_urls>"
+ ],
+
+  "content_scripts": [
+    {
+      "js": ["background.js"],
+      "matches": ["*://horriblesubs.info/*"],
+      "match_about_blank": false,
+      "all_frames": true,
+      "run_at": "document_idle"
+    }
+  ]
+
+}
