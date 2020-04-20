@@ -6,4 +6,9 @@ router.post('/receive', async (req, res) => {
     res.status(200).send()
 })
 
+router.get('/', async (req, res) => {    
+    service.findSubtitle(req.query)
+        .then(subtitles => res.json({subtitles}))    
+})
+
 module.exports = router

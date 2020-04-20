@@ -53,8 +53,24 @@ const getAndParseSubtitlesBody = (b) => {
     return subtitles
 }
 
+const findSubtitle = (data) => {
+    console.info('Buscando legendas', data)
+
+    const query = {
+        name: data.name,
+        episode: data.episode,
+        magnetLink: data.magnetLink,
+        pageUrl: data.pageUrl,
+        fileName: data.fileName,
+        language: data.language
+    }
+
+    return SubtitleModel.find(query).exec()
+}
+
 module.exports = {
-    onNotificationRecieve
+    onNotificationRecieve,
+    findSubtitle
 }
 
 

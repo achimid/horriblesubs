@@ -32,7 +32,7 @@ const getHtmlInject = () => {
 }
 
 const getSubtitlesFromAPI = () => {
-    const apiUrl = new URL('http://localhost:9002/api/v1')
+    const apiUrl = new URL('http://localhost:9002/api/v1/subtitle')
     const params = {
         url: window.location.toString().split('#')[0]
     }
