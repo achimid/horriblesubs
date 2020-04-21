@@ -64,7 +64,7 @@ const findByQuery = (data) => {
         language: data.language
     }
 
-    Object.keys(query).forEach((key) => (query[key] == null) && delete query[key]);
+    Object.keys(query).forEach((key) => (query[key] == null) && delete query[key])
 
     return SubtitleModel.find(query).select('episode language name').sort('name episode language').lean()
 }

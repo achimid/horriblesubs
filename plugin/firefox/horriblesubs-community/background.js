@@ -33,7 +33,6 @@ const getSubtitlesFromAPI = () => {
     fetch(apiUrl)
         .then(data => data.json())
         .then((data) => data.subtitles.length > 0 ? setTimeout(loadSubtitles(data), 2000) : null)
-        // .then(loadSubtitles)
 }
 
 const loadSubtitles = (body) => () => {
@@ -162,3 +161,15 @@ const languages = {
 }
 
 getSubtitlesFromAPI()
+
+
+// {
+//     "lastExecution": {
+//         "extractedContent": [
+//             "Eizouken ni wa Te wo Dasu na!",
+//             "Episódio 09",
+//             "https://www.animestc.com/animes/ishuzoku-reviewers/",            
+//             "magnet:?xt=urn:btih:DY7BSGFTVGEL7724W3P7H6DKQXHXISRM&tr=http://nyaa.tracker.wf:7777/announce&tr=udp://tracker.coppersurfer.tk:6969/announce&tr=udp://tracker.internetwarriors.net:1337/announce&tr=udp://tracker.leechersparadise.org:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://p4p.arenabg.com:1337/announce&tr=udp://mgtracker.org:6969/announce&tr=udp://tracker.tiny-vps.com:6969/announce&tr=udp://peerfect.org:6969/announce&tr=http://share.camoe.cn:8080/announce&tr=http://t.nyaatracker.com:80/announce&tr=https://open.kickasstracker.com:443/announce"
+//         ]
+//     }        
+// }
