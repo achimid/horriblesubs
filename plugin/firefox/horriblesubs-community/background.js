@@ -74,7 +74,6 @@ const receiveNewUrls = async () => {
 
             json = { lastExecution: { extractedTarget: JSON.stringify(json) } }
 
-            debugger
             const key = JSON.stringify(json)
             if (localStorage.getItem(key)) return
 
