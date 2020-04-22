@@ -1,3 +1,7 @@
+const SERVER_URL = 'http://localhost:9002'
+const GET_SUBTITLES_URL = SERVER_URL + '/api/v1/subtitle'
+const RECEIVE_SUBTITLES_URL = SERVER_URL + '/api/v1/subtitle/receive'
+
 const getSpanSubtitle = (lang, id) => {
     const url = `http://localhost:9002/api/v1/subtitle/${id}/download`
     const message = lang == 'en' ? 'Subtitle - Original' : 'Subtitle - * Automatically translated (May have several mistakes)'
@@ -7,7 +11,7 @@ const getSpanSubtitle = (lang, id) => {
     return `
         <span class="dl-type">
             <a title="Download ${language} ${message}" href="${url}">
-                ${language} ${mark}
+                ${capitalize(lang)} ${mark}
             </a>
         </span>
     `
@@ -21,9 +25,9 @@ const getDivSubtitles = (content) => {
         </div>`
 }
 
-const getSubtitlesFromAPI = () => {
+const getSubtitlesFromAPI = async () => {
 
-    const apiUrl = new URL('http://localhost:9002/api/v1/subtitle')
+    const apiUrl = new URL(GET_SUBTITLES_URL)
     const params = {
         pageUrl: window.location.toString()
     }
@@ -32,7 +36,7 @@ const getSubtitlesFromAPI = () => {
 
     fetch(apiUrl)
         .then(data => data.json())
-        .then((data) => data.subtitles.length > 0 ? setTimeout(loadSubtitles(data), 2000) : null)
+        .then((data) => data.subtitles.length > 0 ? setTimeout(loadSubtitles(data), 1500) : null)
 }
 
 const loadSubtitles = (body) => () => {
@@ -48,6 +52,38 @@ const loadSubtitles = (body) => () => {
         }
     })
 }
+
+
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+const receiveNewUrls = async () => {
+    document.querySelector('.more-button').click()
+    setTimeout(function() {
+        const name = document.querySelector('.entry-title').textContent
+        const pageUrl = location.href;
+
+        [...document.querySelectorAll('.rls-label')].map(el => {
+            const episode = el.querySelector('strong').textContent
+            const magnetLink = el.parentNode.querySelector('.link-720p > .hs-magnet-link > a').href
+            
+            let json = {
+                name, pageUrl, episode, magnetLink
+            }
+
+            json = { lastExecution: { extractedTarget: JSON.stringify(json) } }
+
+            sendUrlToReceive(json)
+        })
+    }, 2000)
+}
+
+const sendUrlToReceive = (body) => fetch(RECEIVE_SUBTITLES_URL, 
+    { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' }})
+    .then(console.log)
+    .catch(console.log)
+
 
 function groupBy(xs, f) {
     return xs.reduce((r, v, i, a, k = f(v)) => ((r[k] || (r[k] = [])).push(v), r), {});
@@ -160,16 +196,5 @@ const languages = {
     'zu': 'Zulu'
 }
 
-getSubtitlesFromAPI()
-
-
-// {
-//     "lastExecution": {
-//         "extractedContent": [
-//             "Eizouken ni wa Te wo Dasu na!",
-//             "Episódio 09",
-//             "https://www.animestc.com/animes/ishuzoku-reviewers/",            
-//             "magnet:?xt=urn:btih:DY7BSGFTVGEL7724W3P7H6DKQXHXISRM&tr=http://nyaa.tracker.wf:7777/announce&tr=udp://tracker.coppersurfer.tk:6969/announce&tr=udp://tracker.internetwarriors.net:1337/announce&tr=udp://tracker.leechersparadise.org:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://p4p.arenabg.com:1337/announce&tr=udp://mgtracker.org:6969/announce&tr=udp://tracker.tiny-vps.com:6969/announce&tr=udp://peerfect.org:6969/announce&tr=http://share.camoe.cn:8080/announce&tr=http://t.nyaatracker.com:80/announce&tr=https://open.kickasstracker.com:443/announce"
-//         ]
-//     }        
-// }
+getSubtitlesFromAPI().then(() => console.info('Subtitles Loaded...'))
+receiveNewUrls().then(() => console.info('Possibles subtitles sended...'))

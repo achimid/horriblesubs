@@ -12,7 +12,10 @@ const onExtractionDone = (extraction, callback) => {
     if (subtitles && subtitles.length > 0) {
         callback({body: extraction})
     } else if (_id) {
-        socket.on(`${_id}_DONE`, callback)
+        socket.on(`${_id}_DONE`, (data) => { 
+            callback(data)
+            socket.off(`${_id}_DONE`)
+        })
     }
 }
 

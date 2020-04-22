@@ -4,39 +4,53 @@ const SubtitleModel = require('./subtitle-model')
 
 const langsToTranslateByDefault = process.env.DEFAULT_LANGUAGES_TRANSLATION.split('|')
 
-const getLinks = (data) => {
-    return data.lastExecution.extractedContent.filter(s => (s || '').indexOf('magnet') >= 0)
-}
-
 const sendExtractionRequest = (body) => fetch(process.env.MKV_EXTRACT_API + process.env.MKV_EXTRACT_API_URI, 
     { method: 'post', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' }})
 
-const sendExtraction = (magnetLink) => {
+const sendExtraction = (magnetLink, subtitleId) => {
     console.info('Enviando para extração...')
 
     const body = { magnetLink, langsTo: langsToTranslateByDefault, ignoreCache: 'false' }
     sendExtractionRequest(body)
         .then(res => res.json())
-        .then(extraction => onExtractionDone(extraction, whenExtractionDone))
+        .then(extraction => onExtractionDone(extraction, whenExtractionDone(subtitleId)))
 }
 
-const onNotificationRecieve = (data) => getLinks(data).map(sendExtraction)  
+const onNotificationRecieve = async (data) => {
+    const subtileBody = JSON.parse(data.lastExecution.extractedTarget)
 
-const whenExtractionDone = ({body}) => {
-    console.info('Evento de download completo recebido')
+    const count = await SubtitleModel.count({magnetLink: subtileBody.magnetLink})
+    if (count > 0) return Promise.resolve()
+
+    const subtitle = new SubtitleModel(subtileBody)    
+    subtitle.save()
+
+    sendExtraction(subtitle.magnetLink, subtitle._id)
+}
+
+const whenExtractionDone = (subtitleId) => async ({body}) => {
+    console.info('Evento de download completo recebido', subtitleId)
+
+    const subOriginal = await SubtitleModel.findById(subtitleId)
     
-    const subtitles = getAndParseSubtitlesBody(body)
+    const subtitles = getAndParseSubtitlesBody(body, subOriginal)
     SubtitleModel.insertMany(subtitles)
         .then(() => console.info('Legendas salvas...'))
         .catch(() => console.error('Erro ao salvar legendas duplicadas...'))    
 
+    subOriginal.remove()
+
 }
 
-const getAndParseSubtitlesBody = (b) => {
+const getAndParseSubtitlesBody = (b, subtitle) => {
 
-    let subtitles = b.subtitles.map(sub => 
-        sub.translations.map(t => {
+    let subtitles = b.subtitles.map(sub => {
+        const subs = sub.translations.map(t => {
             return {
+                name: subtitle.name,
+                magnetLink: subtitle.magnetLink,
+                episode: subtitle.episode,
+                pageUrl: subtitle.pageUrl,
                 fileName: sub.fileName,
                 content: t.content,
                 language: t.to,
@@ -48,7 +62,15 @@ const getAndParseSubtitlesBody = (b) => {
                 })
             }
         })
-    ).flat()
+
+        const originalSub = JSON.parse(JSON.stringify(subs[0]))
+        originalSub.content = sub.fileContent
+        originalSub.language = b.langFrom || 'en'
+        delete originalSub.dialoguesMap
+
+        subs.push(originalSub)   
+        return subs
+    }).flat()
 
     return subtitles
 }
@@ -59,7 +81,9 @@ const findByQuery = (data) => {
         name: data.name,
         episode: data.episode,
         magnetLink: data.magnetLink,
-        pageUrl: data.pageUrl,
+        pageUrl: {
+            $in: [data.pageUrl, data.pageUrl.split('#')[0]]
+        },
         fileName: data.fileName,
         language: data.language
     }
