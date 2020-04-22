@@ -68,10 +68,7 @@ const receiveNewUrls = async () => {
             const episode = el.querySelector('strong').textContent
             const magnetLink = el.parentNode.querySelector('.hs-magnet-link > a').href
             
-            let json = {
-                name, pageUrl, episode, magnetLink
-            }
-
+            let json = { name, pageUrl, episode, magnetLink }
             json = { lastExecution: { extractedTarget: JSON.stringify(json) } }
 
             const key = JSON.stringify(json)
