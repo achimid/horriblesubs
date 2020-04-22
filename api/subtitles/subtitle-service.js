@@ -18,9 +18,10 @@ const sendExtraction = (magnetLink, subtitleId) => {
 
 const onNotificationRecieve = async (data) => {
     const subtileBody = JSON.parse(data.lastExecution.extractedTarget)
+    subtileBody.pageUrl = subtileBody.pageUrl.split('#')[0]
 
-    const count = await SubtitleModel.count({magnetLink: subtileBody.magnetLink})
-    if (count > 0) return Promise.resolve()
+    const count = await SubtitleModel.findOne({magnetLink: subtileBody.magnetLink})
+    if (count) return Promise.resolve()
 
     const subtitle = new SubtitleModel(subtileBody)    
     subtitle.save()

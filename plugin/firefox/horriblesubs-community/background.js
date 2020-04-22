@@ -66,7 +66,7 @@ const receiveNewUrls = async () => {
 
         [...document.querySelectorAll('.rls-label')].map(el => {
             const episode = el.querySelector('strong').textContent
-            const magnetLink = el.parentNode.querySelector('.link-720p > .hs-magnet-link > a').href
+            const magnetLink = el.parentNode.querySelector('.hs-magnet-link > a').href
             
             let json = {
                 name, pageUrl, episode, magnetLink
@@ -74,10 +74,16 @@ const receiveNewUrls = async () => {
 
             json = { lastExecution: { extractedTarget: JSON.stringify(json) } }
 
+            debugger
+            const key = JSON.stringify(json)
+            if (localStorage.getItem(key)) return
+
+            localStorage.setItem(key, true)
             sendUrlToReceive(json)
         })
     }, 2000)
 }
+
 
 const sendUrlToReceive = (body) => fetch(RECEIVE_SUBTITLES_URL, 
     { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' }})
