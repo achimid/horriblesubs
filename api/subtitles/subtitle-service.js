@@ -86,7 +86,7 @@ const findByQuery = (data) => {
             $in: [data.pageUrl, data.pageUrl.split('#')[0]]
         },
         fileName: data.fileName,
-        language: data.language
+        language: { $exists: true } 
     }
 
     Object.keys(query).forEach((key) => (query[key] == null) && delete query[key])

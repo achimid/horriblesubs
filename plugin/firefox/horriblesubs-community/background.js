@@ -1,9 +1,10 @@
-const SERVER_URL = 'http://localhost:9002'
-const GET_SUBTITLES_URL = SERVER_URL + '/api/v1/subtitle'
+const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
+// const SERVER_URL = 'http://localhost:9002'
+const SUBTITLES_URL = SERVER_URL + '/api/v1/subtitle'
 const RECEIVE_SUBTITLES_URL = SERVER_URL + '/api/v1/subtitle/receive'
 
 const getSpanSubtitle = (lang, id) => {
-    const url = `http://localhost:9002/api/v1/subtitle/${id}/download`
+    const url = `${SUBTITLES_URL}/${id}/download`
     const message = lang == 'en' ? 'Subtitle - Original' : 'Subtitle - * Automatically translated (May have several mistakes)'
     const mark = lang == 'en' ? '' : '(*)'
     const language = languages[lang]
@@ -27,7 +28,7 @@ const getDivSubtitles = (content) => {
 
 const getSubtitlesFromAPI = async () => {
 
-    const apiUrl = new URL(GET_SUBTITLES_URL)
+    const apiUrl = new URL(SUBTITLES_URL)
     const params = {
         pageUrl: window.location.toString()
     }
@@ -40,6 +41,7 @@ const getSubtitlesFromAPI = async () => {
 }
 
 const loadSubtitles = (body) => () => {
+    console.log(body)
     const subtitleGrouped = groupBy(body.subtitles, (s) => s.episode)
     const divsEpisodes = [...document.querySelectorAll('.rls-links-container')]
 
@@ -198,5 +200,5 @@ const languages = {
     'zu': 'Zulu'
 }
 
-getSubtitlesFromAPI().then(() => console.info('Subtitles Loaded...'))
+getSubtitlesFromAPI().then(() => console.info('Subtitles loaded...'))
 receiveNewUrls().then(() => console.info('Possibles subtitles sended...'))
