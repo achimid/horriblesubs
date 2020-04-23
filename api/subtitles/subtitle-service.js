@@ -20,7 +20,7 @@ const onNotificationRecieve = async (data) => {
     const subtileBody = JSON.parse(data.lastExecution.extractedTarget)
     subtileBody.pageUrl = subtileBody.pageUrl.split('#')[0]
 
-    const count = await SubtitleModel.findOne({magnetLink: subtileBody.magnetLink})
+    const count = await SubtitleModel.findOne({magnetLink: subtileBody.magnetLink, content: { $exists: true } })
     if (count) return Promise.resolve()
 
     const subtitle = new SubtitleModel(subtileBody)    
