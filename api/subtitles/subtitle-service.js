@@ -19,14 +19,15 @@ const sendExtraction = (magnetLink, subtitleId) => {
 const onNotificationRecieve = async (data) => {
     const subtileBody = JSON.parse(data.lastExecution.extractedTarget)
     subtileBody.pageUrl = subtileBody.pageUrl.split('#')[0]
-
-    const count = await SubtitleModel.findOne({magnetLink: subtileBody.magnetLink, content: { $exists: true } })
-    if (count) return Promise.resolve()
+    
+    const { name, episode, pageUrl } = subtileBody
+    const finded = await SubtitleModel.findOne({name, episode, pageUrl, content: { $exists: true } })
+    if (finded) return Promise.resolve()
 
     const subtitle = new SubtitleModel(subtileBody)    
     subtitle.save()
-
-    sendExtraction(subtitle.magnetLink, subtitle._id)
+        .then(() => sendExtraction(subtitle.magnetLink, subtitle._id))    
+        .catch(() => console.info('Erro tentando salvar legenda duplicada', subtitle))
 }
 
 const whenExtractionDone = (subtitleId) => async ({body}) => {

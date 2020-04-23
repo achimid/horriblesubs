@@ -20,8 +20,6 @@ const schema = mongoose.Schema({
     }]
 }, { versionKey: false, timestamps: true})
 
-schema.index({ name: 1, episode: 1, pageUrl: 1, language: 1 }, { unique: true, background: true, dropDups: true });
-
 schema.methods.buildContentBasedOnSugestions = function() {
     console.time('time_to_build_content')
 
