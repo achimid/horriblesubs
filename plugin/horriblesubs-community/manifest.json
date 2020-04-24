@@ -1,17 +1,16 @@
 {
 
   "manifest_version": 2,
-  "name": "HorribleSubs Subtitle Community",
+  "name": "HorribleSubs Community",
   "description": "Disponibiliza para download as legendas dos episódios traduzidas automaticamente. Plugin não oficial feito por fã.",
-  "version": "0.1",
+  "version": "0.2",
 
   "icons": {
-    "48": "icons/if_source_code_103710.svg"
+    "48": "icons/icon.png"
   },
 
   "permissions": [
-    "webRequest",
-    "<all_urls>"
+    "https://horriblesubs-community.herokuapp.com/*"
  ],
 
 
