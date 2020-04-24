@@ -1,5 +1,6 @@
 require('dotenv').config()
 
+const cors = require('cors')
 const express = require('express')
 const compression = require('compression')
 const app = express()
@@ -10,6 +11,7 @@ global.socket = require('socket.io')(server)
 const routes = require('./config/routes')
 const statup = require('./config/startup')
 
+app.use(cors())
 app.use(compression())
 app.use(express.json())
 

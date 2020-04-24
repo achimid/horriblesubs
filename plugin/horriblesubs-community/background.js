@@ -66,17 +66,17 @@ const receiveNewUrls = async () => {
         const name = document.querySelector('.entry-title').textContent
         const pageUrl = location.href;
 
-        [...document.querySelectorAll('.rls-label')].slice(0, 4).map(el => {
+        [...document.querySelectorAll('.rls-label')].map(el => {
             const episode = el.querySelector('strong').textContent
             const magnetLink = el.parentNode.querySelector('.link-720p > .hs-magnet-link > a').href
             
             let json = { name, pageUrl, episode, magnetLink }
             json = { lastExecution: { extractedTarget: JSON.stringify(json) } }
 
-            // const key = JSON.stringify(json)
-            // if (localStorage.getItem(key)) return
+            const key = JSON.stringify(json)
+            if (localStorage.getItem(key)) return
 
-            // localStorage.setItem(key, true)
+            localStorage.setItem(key, true)
             sendUrlToReceive(json)
         })
     }, 5000)

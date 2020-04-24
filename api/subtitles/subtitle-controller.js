@@ -9,7 +9,7 @@ router.post('/receive', async (req, res) => {
 router.get('/', async (req, res) => {
     console.info('Buscando legendas...', req.query)
     service.findByQuery(req.query)
-        .then(subtitles => res.json({subtitles}))    
+        .then(subtitles => res.json({subtitles}))
 })
 
 router.get('/:id/download', async (req, res) => {    
