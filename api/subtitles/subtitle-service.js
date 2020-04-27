@@ -109,10 +109,16 @@ const findByQuery = (data) => {
 
 const findById = (id) => SubtitleModel.findById(id).select('episode language name content fileName').lean()
 
+const deleteSubtitlesUncompleted = () => {
+    console.info('Removendo legendas incompletas...')
+    SubtitleModel.deleteMany({content: { $exists: false}}).exec()
+}
+
 module.exports = {
     onNotificationRecieve,
     findByQuery,
-    findById
+    findById,
+    deleteSubtitlesUncompleted
 }
 
 
