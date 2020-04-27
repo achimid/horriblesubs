@@ -10,7 +10,8 @@
   },
 
   "permissions": [
-    "https://horriblesubs-community.herokuapp.com/*"
+    "https://horriblesubs-community.herokuapp.com/*",
+    "<all_urls>"
  ],
 
 

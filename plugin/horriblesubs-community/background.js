@@ -1,5 +1,5 @@
-const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
-// const SERVER_URL = 'http://localhost:9002'
+// const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
+const SERVER_URL = 'http://localhost:9002'
 const SUBTITLES_URL = SERVER_URL + '/api/v1/subtitle'
 const RECEIVE_SUBTITLES_URL = SERVER_URL + '/api/v1/subtitle/receive'
 
@@ -73,10 +73,10 @@ const receiveNewUrls = async () => {
             let json = { name, pageUrl, episode, magnetLink }
             json = { lastExecution: { extractedTarget: JSON.stringify(json) } }
 
-            const key = JSON.stringify(json)
-            if (localStorage.getItem(key)) return
+            // const key = JSON.stringify(json)
+            // if (localStorage.getItem(key)) return
 
-            localStorage.setItem(key, true)
+            // localStorage.setItem(key, true)
             sendUrlToReceive(json)
         })
     }, 5000)
@@ -86,7 +86,7 @@ const receiveNewUrls = async () => {
 const sendUrlToReceive = (body) => fetch(RECEIVE_SUBTITLES_URL, 
     { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' }})
     .then(console.log)
-    .catch(console.log)
+    .catch(console.error)
 
 
 function groupBy(xs, f) {

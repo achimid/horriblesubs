@@ -1,19 +1,28 @@
 const fetch = require('node-fetch')
 const { onExtractionDone } = require('./subtitle-socket-client')
+const PQueue = require('../utils/promise-queue')
 const SubtitleModel = require('./subtitle-model')
 
 const langsToTranslateByDefault = process.env.DEFAULT_LANGUAGES_TRANSLATION.split('|')
 
-const sendExtractionRequest = (body) => fetch(process.env.MKV_EXTRACT_API + process.env.MKV_EXTRACT_API_URI, 
-    { method: 'post', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' }})
+const sendExtractionRequest = (body) => {
+        console.info('Enviando para extração...')
+
+        return fetch(process.env.MKV_EXTRACT_API + process.env.MKV_EXTRACT_API_URI, 
+        { method: 'post', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' }})
+    }
 
 const sendExtraction = (magnetLink, subtitleId) => {
-    console.info('Enviando para extração...')
+    console.info('Enfileirando para extração...')
 
-    const body = { magnetLink, langsTo: langsToTranslateByDefault, ignoreCache: 'false' }
-    sendExtractionRequest(body)
-        .then(res => res.json())
-        .then(extraction => onExtractionDone(extraction, whenExtractionDone(subtitleId)))
+    const body = { magnetLink, langsTo: langsToTranslateByDefault, ignoreCache: 'true' }
+    
+    const promiseSend = () => {
+        return sendExtractionRequest(body)
+            .then(res => res.json())
+            .then(extraction => onExtractionDone(extraction, whenExtractionDone(subtitleId)))
+    }
+    PQueue.push(promiseSend)
 }
 
 const onNotificationRecieve = async (data) => {
@@ -32,6 +41,9 @@ const onNotificationRecieve = async (data) => {
 
 const whenExtractionDone = (subtitleId) => async ({body}) => {
     console.info('Evento de download completo recebido', subtitleId)
+    
+    // Chamada para executar a proxima extração enfileirada
+    PQueue.execNext()
 
     const subOriginal = await SubtitleModel.findById(subtitleId)
     
