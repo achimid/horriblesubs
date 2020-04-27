@@ -14,6 +14,11 @@ const statup = require('./config/startup')
 app.use(cors())
 app.use(compression())
 app.use(express.json())
+app.use(express.static('public'));
+
+app.disable('x-powered-by')
+
+
 
 routes(app)
 statup()
