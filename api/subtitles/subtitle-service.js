@@ -15,7 +15,7 @@ const sendExtractionRequest = (body) => {
 const sendExtraction = (magnetLink, subtitleId) => {
     console.info('Enfileirando para extração...')
 
-    const body = { magnetLink, langsTo: langsToTranslateByDefault, ignoreCache: 'true' }
+    const body = { magnetLink, langsTo: langsToTranslateByDefault, ignoreCache: 'false' }
     
     const promiseSend = () => {
         return sendExtractionRequest(body)
