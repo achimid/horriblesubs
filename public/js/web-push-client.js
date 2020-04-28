@@ -36,6 +36,12 @@ function urlBase64ToUint8Array(base64String) {
 function registerNotification() {
     if ('serviceWorker' in navigator) {
         console.log('Registering service worker') 
-        run().catch(error => console.error(error))
+        Notification.requestPermission().then(function (permission) {
+            // If the user accepts, let's create a notification
+            if (permission === "granted") {
+                run().catch(() => run().catch(error => console.error(error)))
+            }
+        })
+        
     }
 }
