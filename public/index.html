@@ -7,6 +7,14 @@
     
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
 
+    <!-- FavIcon -->
+		<link rel="apple-touch-icon" sizes="180x180" href="/icon/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png">
+		<link rel="manifest" href="/icon/site.webmanifest">
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="theme-color" content="#ffffff">
+
     <!-- <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css"> -->
     <link rel="stylesheet" href="css/animate.css">
     
@@ -32,9 +40,10 @@
 	      </button>
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav nav ml-auto">
-				<li class="nav-item"><a href="#about-section" class="nav-link"><span>API Doc</span></a></li>
-				<li class="nav-item"><a href="#about-section" class="nav-link"><span>About</span></a></li>			  
+          <ul class="navbar-nav nav ml-auto">
+            <li class="nav-item"><a href="#about-section" class="nav-link"><span>API Doc</span></a></li>
+            <li class="nav-item"><a href="#about-section" class="nav-link"><span>About</span></a></li>			  
+            <li class="nav-item" onclick="registerNotification()"><a href="#" class="nav-link"><span>Notification</span></a></li>			  
 	        </ul>
 	      </div>
 	    </div>
@@ -65,14 +74,14 @@
             <form action="#" class="bg-light p-4 p-md-5 contact-form" onsubmit="onSubmitForm(event)">
               <div class="text-center">
                   <p class="small-pad">Original Sentence: </p>
-                  <p><b class="original-sentence">"Hello, how are you?"</b></p>
+                  <p><b class="original-sentence">"Something is wrong. Sorry!"</b></p>
               </div>
               <div class="form-group">
                 <textarea name="" id="suggestion" cols="30" rows="10" class="form-control"></textarea>
               </div>
-              <div class="form-group text-center">
-                <input type="submit" value="Send Suggestions" class="btn btn-primary py-3 px-5">
-                <input type="button" value="That is OK, NEXT >" class="btn btn-primary py-3 px-5" onclick="renderNextDialogue()">
+              <div class="form-group text-center ">
+                <input type="submit" value="Send Suggestions" class="btn btn-primary py-3 px-5 btn-m-b">
+                <input type="button" value="That´s OK, NEXT >" class="btn btn-primary py-3 px-5 btn-m-b" onclick="renderNextDialogue()">
               </div>
             </form>
           
@@ -116,6 +125,7 @@
   
   <script src="js/main.js"></script>
   <script src="js/subtitle-api.js"></script>
+  <script src="js/web-push-client.js"></script>
     
   </body>
 </html>

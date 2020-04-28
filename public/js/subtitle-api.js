@@ -26,7 +26,7 @@ const getDivSuggestions = (d) => {
                     <span class="icon-map-signs"></span>
                 </div>
                 <div>
-                    <h3 class="mb-3">Suggestion ${parseInt(index)}</h3>
+                    <h3 class="mb-3">Suggestion ${parseInt(index) + 1}</h3>
                     <b class="small small-pad">${d.original}</b>
                     <p class="small-pad">${sug}</p>
                 </div>
@@ -57,14 +57,14 @@ const getDialoguesFromAPI = () => {
         })
 }
 
-const renderNextDialogue = (d = dialogues.pop()) => {
+const renderNextDialogue = (d = dialogues.shift()) => {
 
     if (!dialogues.length) getDialoguesFromAPI()
 
     current = d
 
     $suggestionsList.innerHTML = getDivSuggestions(d)
-    $originalSentence.innerHTML = `"${d.original}"`
+    $originalSentence.innerHTML = `${d.original}`
 
     contentWayPoint()
 }

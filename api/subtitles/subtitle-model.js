@@ -18,7 +18,7 @@ const schema = mongoose.Schema({
         sugestions: [{ type: String }],
         index: { type: Number}
     }]
-}, { versionKey: false, timestamps: true})
+}, { timestamps: true})
 
 schema.methods.buildContentBasedOnSugestions = function() {
     console.time('time_to_build_content')
