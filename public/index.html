@@ -56,48 +56,23 @@
 
 
           <div class="col-md-5 d-flex">
-            <div class="row d-flex contact-info mb-5">
-                <div class="col-md-12 ftco-animate special-col">
-                    <div class="box p-2 px-3 bg-light d-flex">
-                        <div class="icon mr-3">
-                            <span class="icon-map-signs"></span>
-                        </div>
-                        <div>
-                            <h3 class="mb-3">Suggestion 01</h3>
-                            <b class="small small-pad">Hello, how are you?</b>
-                            <p class="small-pad">Olá, como vai você?</p>
-                      </div>
-                    </div>
-                </div>    
-                
-                <div class="col-md-12 ftco-animate special-col">
-                  <div class="box p-2 px-3 bg-light d-flex">
-                      <div class="icon mr-3">
-                          <span class="icon-map-signs"></span>
-                      </div>
-                      <div>
-                          <h3 class="mb-3">Suggestion 02</h3>
-                          <p class="small small-pad">Hello, how are you?</p>
-                          <p class="small-pad">E ai, blz mano?</p>
-                    </div>
-                  </div>
-              </div>    
+            <div class="row d-flex contact-info mb-5 suggestions-list">
 
-              
             </div>
         </div>
 
           <div class="col-md-7 order-md-last d-flex ftco-animate">
-            <form action="#" class="bg-light p-4 p-md-5 contact-form">
+            <form action="#" class="bg-light p-4 p-md-5 contact-form" onsubmit="onSubmitForm(event)">
               <div class="text-center">
                   <p class="small-pad">Original Sentence: </p>
-                  <p><b>"Hello, how are you?"</b></p>
+                  <p><b class="original-sentence">"Hello, how are you?"</b></p>
               </div>
               <div class="form-group">
-                <textarea name="" id="" cols="30" rows="10" class="form-control"></textarea>
+                <textarea name="" id="suggestion" cols="30" rows="10" class="form-control"></textarea>
               </div>
               <div class="form-group text-center">
-                <input type="submit" value="Send Message" class="btn btn-primary py-3 px-5">
+                <input type="submit" value="Send Suggestions" class="btn btn-primary py-3 px-5">
+                <input type="button" value="That is OK, NEXT >" class="btn btn-primary py-3 px-5" onclick="renderNextDialogue()">
               </div>
             </form>
           
@@ -140,6 +115,7 @@
   <!-- <script src="js/google-map.js"></script> -->
   
   <script src="js/main.js"></script>
+  <script src="js/subtitle-api.js"></script>
     
   </body>
 </html>

@@ -145,7 +145,7 @@
 	// counter();
 
 
-	var contentWayPoint = function() {
+	contentWayPoint = function() {
 		var i = 0;
 		$('.ftco-animate').waypoint( function( direction ) {
 

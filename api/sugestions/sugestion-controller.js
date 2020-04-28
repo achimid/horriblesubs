@@ -8,7 +8,7 @@ router.put('/:dialogueId', async (req, res) => {
 
 router.get('/', async (req, res) => {        
     service.getDialoguesToImproveSugestions(req.query)
-        .then((subtitle) => res.json(subtitle))
+        .then((dialogues) => res.json({dialogues}))
 })
 
 
