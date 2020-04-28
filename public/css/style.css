@@ -9915,3 +9915,8 @@ textarea.form-control {
   100% {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -136px; } }
+
+.small-pad {
+  margin-top: 0;
+  margin-bottom: 0;
+}
