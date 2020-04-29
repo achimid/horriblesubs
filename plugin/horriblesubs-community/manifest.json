@@ -2,8 +2,8 @@
 
   "manifest_version": 2,
   "name": "HorribleSubs Community",
-  "description": "Disponibiliza para download as legendas dos episódios traduzidas automaticamente. Plugin não oficial feito por fã.",
-  "version": "0.3",
+  "description": "Provides automatically translated subtitles for episodes. Unofficial plugin made by fan.",
+  "version": "0.4",
 
   "icons": {
     "48": "icons/icon.png"
