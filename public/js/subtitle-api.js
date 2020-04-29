@@ -1,6 +1,5 @@
 // const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
 const SERVER_URL = 'http://localhost:9002'
-// const SERVER_URL = ''
 const SUGGESTION_URL = SERVER_URL + '/api/v1/suggestion'
 
 const language = 'pt'
@@ -24,7 +23,7 @@ const getDivSuggestions = (d) => {
         .sort((a, b) => (b.upVote || 0) - (a.upVote || 0))
         .map((sug, index) => `
             <div class="col-md-12 ftco-animate special-col">
-                <div class="box p-2 px-3 bg-light d-flex clickable" onclick="selectSuggestion(event)">
+                <div class="box p-2 px-3 bg-light d-flex clickable" onclick="selectSuggestion(event, '${sug._id}')">
                     <div class="icon mr-3">
                         <span class="icon-map-signs"></span>
                     </div>
@@ -46,6 +45,8 @@ const getDialoguesFromAPI = () => {
             if (json.dialogues.length == 0) {
                 page = 0
                 skip++
+
+                if (skip > 200) skip = 0
 
                 setWithExpiry('page', page, 3600000 * 2) // 2 horas
                 setWithExpiry('skip', skip, 3600000 * 2) // 2 horas
@@ -97,20 +98,21 @@ const sendNewSuggestionToAPI = (id, suggestion) => {
         .catch(console.error)
 }
 
-function selectSuggestion(event) {
+function selectSuggestion(event, suggestionId) {
     if ($suggestionTextArea) {
         $suggestionTextArea.value = event.target.parentNode.querySelector('p').textContent
     } else {
-        console.log('voted')
+        upVote(suggestionId)
+        renderNextDialogue()
     }
 }
 
-const voteSuggestion
+const upVote = (suggestionId) => fetch(SUGGESTION_URL + '/upvote/' + suggestionId, { method: 'PUT', headers: { 'Content-Type': 'application/json' }})
+
+const downVote = (suggestionId) => fetch(SUGGESTION_URL + '/downvote/' + suggestionId, { method: 'PUT', headers: { 'Content-Type': 'application/json' }})
 
 
-getDialoguesFromAPI()
-    .then(() => renderNextDialogue())    
-
+getDialoguesFromAPI().then(() => renderNextDialogue())    
 
 
 function setWithExpiry(key, value, ttl) {

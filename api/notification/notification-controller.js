@@ -26,6 +26,7 @@ const sendNotification = (subscription) => {
         title: "titleafsadf",
         body: "data.body",
         icon: 'https://horriblesubs-community.herokuapp.com/icon/android-chrome-192x192.png',
+        data: '5ea9bcdbeaf855229cd0ac2f',
         actions: [  
             {action: 'ok', title: '👍 OK'},
             {action: 'nok', title: '👎 Not OK'}
