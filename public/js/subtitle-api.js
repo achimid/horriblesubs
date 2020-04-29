@@ -136,3 +136,10 @@ function getWithExpiry(key) {
     }
     return item.value
 }
+
+
+$('#suggestion').keydown(function (e) {
+    if (e.ctrlKey && e.keyCode == 13) {
+      $('form').submit()
+    }
+});
