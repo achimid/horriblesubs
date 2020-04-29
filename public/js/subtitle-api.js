@@ -1,6 +1,7 @@
 const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
 // const SERVER_URL = 'http://localhost:9002'
-const SUGGESTION_URL = SERVER_URL + '/api/v1/sugestion'
+// const SERVER_URL = ''
+const SUGGESTION_URL = SERVER_URL + '/api/v1/suggestion'
 
 const language = 'pt'
 let skip = getWithExpiry('skip') || 0
@@ -19,7 +20,7 @@ const $form = document.querySelector('form')
 const $suggestionTextArea = document.querySelector('#suggestion')
 
 const getDivSuggestions = (d) => {
-    return (d.sugestions || []).map((sug, index) => `
+    return (d.suggestions || []).map((sug, index) => `
         <div class="col-md-12 ftco-animate special-col">
             <div class="box p-2 px-3 bg-light d-flex">
                 <div class="icon mr-3">
@@ -73,7 +74,7 @@ const onSubmitForm = (event) => {
     event.preventDefault()
     if (!$suggestionTextArea.value) return
     
-    current.sugestions.push($suggestionTextArea.value)
+    current.suggestions.push($suggestionTextArea.value)
     renderNextDialogue(current)
     
     sendNewSuggestionToAPI(current._id, $suggestionTextArea.value)
@@ -81,8 +82,8 @@ const onSubmitForm = (event) => {
     $suggestionTextArea.value = ''
 }
 
-const sendNewSuggestionToAPI = (id, sugestion) => {
-    const body = { sugestion }
+const sendNewSuggestionToAPI = (id, suggestion) => {
+    const body = { suggestion }
     fetch(SUGGESTION_URL + '/' + id, 
         { method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' }})
         .then(() => { setTimeout(renderNextDialogue, 250) })

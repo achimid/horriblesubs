@@ -51,7 +51,7 @@ const whenExtractionDone = (subtitleId) => async ({body}) => {
     SubtitleModel.insertMany(subtitles)
         .then(() => console.info('Legendas salvas...'))
         .catch(() => console.error('Erro ao salvar legendas duplicadas...'))    
-
+ 
     subOriginal.remove()
 
 }
@@ -71,7 +71,9 @@ const getAndParseSubtitlesBody = (b, subtitle) => {
                 dialoguesMap: t.dialoguesMap.map(m => {
                     return {
                         ...m,
-                        sugestions: [m.translated]
+                        suggestions: [{
+                            text: m.translated
+                        }]
                     }
                 })
             }

@@ -1,5 +1,6 @@
 const router = require('express').Router()
-const webpush = require('web-push');
+const webpush = require('web-push')
+const service = require('./notification-service')
 
 const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
 const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
@@ -7,13 +8,10 @@ const email = process.env.EMAIL;
 
 webpush.setVapidDetails(email, publicVapidKey, privateVapidKey);
 
-const subscriptions = []
-
 router.post('/subscribe', (req, res) => {
-    const subscription = req.body
-    subscriptions.push(subscription)
-
-    res.status(201).send()
+    service.create(req.body)
+        .then((data) => res.status(201).json(data))
+        .catch(() => res.status(409).send())    
 })
 
 router.get('/', (req, res) => {
@@ -21,7 +19,7 @@ router.get('/', (req, res) => {
     res.status(200).send()
 })
 
-const sendNotificationAll = () => { subscriptions.map(sendNotification) }
+const sendNotificationAll = () => service.listAll().then(subscriptions => (subscriptions || []).map(sendNotification))
 
 const sendNotification = (subscription) => {
     const payload = {
@@ -33,7 +31,6 @@ const sendNotification = (subscription) => {
             {action: 'nok', title: '👎 Not OK'}
         ]  
     }
-
   
     webpush.sendNotification(subscription, JSON.stringify(payload)).catch(error => { console.error(error.stack) })
 }

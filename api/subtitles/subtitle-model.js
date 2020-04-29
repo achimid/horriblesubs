@@ -14,13 +14,16 @@ const schema = mongoose.Schema({
     content: { type: String },
     dialoguesMap: [{
         line: { type: String },
-        original: { type: String },
-        sugestions: [{ type: String }],
+        original: { type: String },        
+        suggestions: [{ 
+            text: { type: String },
+            upVote: { type: Number, default: 0 }
+        }],
         index: { type: Number}
     }]
-}, { timestamps: true})
+}, { versionKey: false, timestamps: true})
 
-schema.methods.buildContentBasedOnSugestions = function() {
+schema.methods.buildContentBasedOnSuggestions = function() {
     console.time('time_to_build_content')
 
     const lines = this.content.split(LINE_SEPARATOR)    
@@ -39,7 +42,7 @@ function getEditedFileContent(lines, dialoguesMap) {
         if (!hasLineTranslated) return line
         
         const firstTranslation = finded[0]
-        return replaceLastPart(firstTranslation.sugestions[0], firstTranslation.line)
+        return replaceLastPart(firstTranslation.suggestions[0].text, firstTranslation.line)
     })
 }
 
