@@ -38,7 +38,41 @@ const getDialoguesToImproveSuggestions = async ({language, page, skip = 0 }) => 
 
 const getPage = (page = 0) => [0 + (page * 20), 20 + (page * 20)]
 
+// TODO: melhorar essa maneira de incrementar a votação, pode ter problema de concorrencia e performance
+const upvoteOnSuggestion = async (suggestionId) => {
+
+    console.time('upvote')
+
+    const subtitle = await SubtitleModel.findOne({'dialoguesMap.suggestions._id': suggestionId})
+    const suggestion = subtitle.dialoguesMap.map(d => d.suggestions.filter(s => s.id == suggestionId)).flat()[0]
+
+    suggestion.upVote++
+
+    await subtitle.save()    
+
+    console.timeEnd('upvote')
+}
+
+// TODO: melhorar essa maneira de incrementar a votação, pode ter problema de concorrencia e performance
+const downvoteOnSuggestion = async (suggestionId) => {
+
+    console.time('downvote')
+
+    const subtitle = await SubtitleModel.findOne({'dialoguesMap.suggestions._id': suggestionId})
+    const suggestion = subtitle.dialoguesMap.map(d => d.suggestions.filter(s => s.id == suggestionId)).flat()[0]
+
+    suggestion.upVote--
+
+    await subtitle.save()    
+
+    console.timeEnd('downvote')
+}
+
+
+
 module.exports = {
     addSuggestion,
-    getDialoguesToImproveSuggestions
+    getDialoguesToImproveSuggestions,
+    upvoteOnSuggestion,
+    downvoteOnSuggestion
 }

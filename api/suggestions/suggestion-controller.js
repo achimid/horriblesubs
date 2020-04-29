@@ -6,10 +6,21 @@ router.put('/:dialogueId', async (req, res) => {
         .then((suggestions) => res.json({suggestions}))
 })
 
-router.get('/', (req, res) => {        
+router.get('/', (req, res) => {
     service.getDialoguesToImproveSuggestions(req.query)
         .then((dialogues) => res.json({dialogues}))
 })
+
+router.put('/upvote/:suggestionId', (req, res) => {
+    service.upvoteOnSuggestion(req.params.suggestionId)
+        .then(() => res.status(200).send())
+})
+
+router.put('/downvote/:suggestionId', (req, res) => {
+    service.downvoteOnSuggestion(req.params.suggestionId)
+        .then(() => res.status(200).send())
+})
+
 
 
 

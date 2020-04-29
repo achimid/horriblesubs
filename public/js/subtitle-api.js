@@ -24,7 +24,7 @@ const getDivSuggestions = (d) => {
         .sort((a, b) => (b.upVote || 0) - (a.upVote || 0))
         .map((sug, index) => `
             <div class="col-md-12 ftco-animate special-col">
-                <div class="box p-2 px-3 bg-light d-flex" onclick="selectSuggestion(event)">
+                <div class="box p-2 px-3 bg-light d-flex clickable" onclick="selectSuggestion(event)">
                     <div class="icon mr-3">
                         <span class="icon-map-signs"></span>
                     </div>
@@ -67,8 +67,11 @@ const renderNextDialogue = (d = dialogues.shift()) => {
     current = d
 
     $suggestionsList.innerHTML = getDivSuggestions(d)
-    $originalSentence.innerHTML = `${d.original}`
-    $suggestionTextArea.value = ''
+    
+    if ($originalSentence) {
+        $originalSentence.innerHTML = `${d.original}`
+        $suggestionTextArea.value = ''
+    }
 
     contentWayPoint()
 }
@@ -95,8 +98,14 @@ const sendNewSuggestionToAPI = (id, suggestion) => {
 }
 
 function selectSuggestion(event) {
-    $suggestionTextArea.value = event.target.parentNode.querySelector('p').textContent
+    if ($suggestionTextArea) {
+        $suggestionTextArea.value = event.target.parentNode.querySelector('p').textContent
+    } else {
+        console.log('voted')
+    }
 }
+
+const voteSuggestion
 
 
 getDialoguesFromAPI()
