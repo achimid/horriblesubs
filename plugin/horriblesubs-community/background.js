@@ -1,5 +1,6 @@
 // const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
-const SERVER_URL = 'http://localhost:9002'
+// const SERVER_URL = 'http://localhost:9002'
+const SERVER_URL = ''
 const SUBTITLES_URL = SERVER_URL + '/api/v1/subtitle'
 const RECEIVE_SUBTITLES_URL = SERVER_URL + '/api/v1/subtitle/receive'
 
