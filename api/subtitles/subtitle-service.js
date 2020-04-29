@@ -116,11 +116,24 @@ const deleteSubtitlesUncompleted = () => {
     SubtitleModel.deleteMany({content: { $exists: false}}).exec()
 }
 
+const listAvailableTitles = async (query) => {
+    const titles = await SubtitleModel.aggregate([
+        { $match: query },
+        { $sort: { createdAt: -1 }},
+        { $group: { "_id": { name: "$name", episode: "$episode" } } },
+        { $limit : 20 }
+    ])
+    .skip(parseInt(query.page || 0))
+
+    return titles.map(t => { return { ...t._id, title: `${t._id.name} ${t._id.episode}`.replace(/ /g,"_")} })
+}
+
 module.exports = {
     onNotificationRecieve,
     findByQuery,
     findById,
-    deleteSubtitlesUncompleted
+    deleteSubtitlesUncompleted,
+    listAvailableTitles
 }
 
 

@@ -12,6 +12,12 @@ router.get('/', async (req, res) => {
         .then(subtitles => res.json({subtitles}))
 })
 
+router.get('/titles', async (req, res) => {
+    console.info('Listando titulos disponiveis...', req.query)
+    service.listAvailableTitles(req.query)
+        .then(titles => res.json({titles}))
+})
+
 router.get('/:id/download', async (req, res) => {    
     service.findById(req.params.id)
         .then(sub => {

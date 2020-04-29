@@ -73,10 +73,10 @@ const receiveNewUrls = async () => {
             let json = { name, pageUrl, episode, magnetLink }
             json = { lastExecution: { extractedTarget: JSON.stringify(json) } }
 
-            // const key = JSON.stringify(json)
-            // if (localStorage.getItem(key)) return
+            const key = JSON.stringify(json)
+            if (localStorage.getItem(key)) return
 
-            // localStorage.setItem(key, true)
+            localStorage.setItem(key, true)
             sendUrlToReceive(json)
         })
     }, 5000)
