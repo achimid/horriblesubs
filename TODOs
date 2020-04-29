@@ -1,3 +1,7 @@
 
 # remover os arquivos do front que nao esta sendo utilizados
-# remover duplicações das notificações
+# quando uma nova legenda for traduzida automaticamente enviar para que se increveu por notificação push para avaliação da legenda.
+# criar fetch da legenda, quando avalida como ok e nok na notificação push
+# Criar uma tela de listagem dos ultimas legendas traduzidas
+# criar uma tela para avaliação de legendas.
+# fazer o atalho de reunilizara a legenda para correção, na tela de sugestões.

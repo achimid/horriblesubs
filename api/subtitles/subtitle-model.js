@@ -42,7 +42,9 @@ function getEditedFileContent(lines, dialoguesMap) {
         if (!hasLineTranslated) return line
         
         const firstTranslation = finded[0]
-        return replaceLastPart(firstTranslation.suggestions[0].text, firstTranslation.line)
+        const firstSuggestion = firstTranslation.suggestions.length > 0 ? firstTranslation.suggestions[0].text : firstTranslation.original
+
+        return replaceLastPart(firstSuggestion, firstTranslation.line)
     })
 }
 

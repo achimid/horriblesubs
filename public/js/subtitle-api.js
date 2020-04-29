@@ -1,5 +1,5 @@
-const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
-// const SERVER_URL = 'http://localhost:9002'
+// const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
+const SERVER_URL = 'http://localhost:9002'
 // const SERVER_URL = ''
 const SUGGESTION_URL = SERVER_URL + '/api/v1/suggestion'
 
@@ -20,21 +20,23 @@ const $form = document.querySelector('form')
 const $suggestionTextArea = document.querySelector('#suggestion')
 
 const getDivSuggestions = (d) => {
-    return (d.suggestions || []).map((sug, index) => `
-        <div class="col-md-12 ftco-animate special-col">
-            <div class="box p-2 px-3 bg-light d-flex">
-                <div class="icon mr-3">
-                    <span class="icon-map-signs"></span>
+    return (d.suggestions || [])
+        .sort((a, b) => (b.upVote || 0) - (a.upVote || 0))
+        .map((sug, index) => `
+            <div class="col-md-12 ftco-animate special-col">
+                <div class="box p-2 px-3 bg-light d-flex" onclick="selectSuggestion(event)">
+                    <div class="icon mr-3">
+                        <span class="icon-map-signs"></span>
+                    </div>
+                    <div>
+                        <h3 class="mb-3">Suggestion ${parseInt(index) + 1}</h3>
+                        <b class="small small-pad">${d.original}</b>
+                        <p class="small-pad" id="suggestion-text">${sug.text}</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="mb-3">Suggestion ${parseInt(index) + 1}</h3>
-                    <b class="small small-pad">${d.original}</b>
-                    <p class="small-pad">${sug}</p>
-                </div>
-            </div>
-        </div>  
+            </div>  
 
-    `).join('')
+        `).join('')
 }
 
 const getDialoguesFromAPI = () => {
@@ -66,6 +68,7 @@ const renderNextDialogue = (d = dialogues.shift()) => {
 
     $suggestionsList.innerHTML = getDivSuggestions(d)
     $originalSentence.innerHTML = `${d.original}`
+    $suggestionTextArea.value = ''
 
     contentWayPoint()
 }
@@ -74,10 +77,11 @@ const onSubmitForm = (event) => {
     event.preventDefault()
     if (!$suggestionTextArea.value) return
     
-    current.suggestions.push($suggestionTextArea.value)
+    const suggestionValue = $suggestionTextArea.value
+    current.suggestions.push({ text: suggestionValue })
     renderNextDialogue(current)
     
-    sendNewSuggestionToAPI(current._id, $suggestionTextArea.value)
+    sendNewSuggestionToAPI(current._id, suggestionValue)
 
     $suggestionTextArea.value = ''
 }
@@ -88,6 +92,10 @@ const sendNewSuggestionToAPI = (id, suggestion) => {
         { method: 'PUT', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' }})
         .then(() => { setTimeout(renderNextDialogue, 250) })
         .catch(console.error)
+}
+
+function selectSuggestion(event) {
+    $suggestionTextArea.value = event.target.parentNode.querySelector('p').textContent
 }
 
 
