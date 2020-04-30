@@ -1,5 +1,5 @@
-// const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
-const SERVER_URL = 'http://localhost:9002'
+const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
+// const SERVER_URL = 'http://localhost:9002'
 const SUGGESTION_URL = SERVER_URL + '/api/v1/suggestion'
 const SUGGESTION_EVALUATE_URL = SERVER_URL + '/api/v1/suggestion/evaluate'
 
