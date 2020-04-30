@@ -119,7 +119,7 @@ const deleteSubtitlesUncompleted = () => {
 const listAvailableTitles = async (query) => {
     const titles = await SubtitleModel
         .find(query)
-        .select('fileName _id magnetLink')
+        // .select('fileName _id magnetLink')
         .sort({ createdAt: -1 })
         .limit(20)
         .skip(parseInt(query.page || 0))

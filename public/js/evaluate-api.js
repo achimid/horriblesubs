@@ -3,15 +3,18 @@ const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
 const SUGGESTION_URL = SERVER_URL + '/api/v1/suggestion'
 const SUGGESTION_EVALUATE_URL = SERVER_URL + '/api/v1/suggestion/evaluate'
 
-const language = 'pt'
-let page = getWithExpiry('page-evaluate') || 0
-
-const getUrlSuggestion = () => `${SUGGESTION_EVALUATE_URL}?language=${language}&page=${page}`
-
-const dialogues = []
-let current = null
 
 const $suggestionsList = document.querySelector('.suggestions-list')
+const $language = document.querySelector('#language')
+
+
+let page = getWithExpiry('page-evaluate') || 0
+
+const getUrlSuggestion = () => `${SUGGESTION_EVALUATE_URL}?language=${localStorage.getItem('language') || $language.value || 'pt'}&page=${page}`
+
+let dialogues = []
+let current = null
+
 
 const getDivSuggestions = (d) => {
     return (d.suggestions || [])
@@ -115,3 +118,11 @@ function getWithExpiry(key) {
     }
     return item.value
 }
+
+$("#language").change(function() { 
+    localStorage.setItem('language', $language.value)
+    dialogues = []
+    getDialoguesFromAPI().then(() => renderNextDialogue())
+})
+
+$language.value = localStorage.getItem('language')

@@ -1,12 +1,12 @@
-const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
-// const SERVER_URL = 'http://localhost:9002'
+// const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
+const SERVER_URL = 'http://localhost:9002'
 const TITLES_URL = SERVER_URL + '/api/v1/subtitle/titles'
 
 
 const $language = document.querySelector('#language')
 const $suggestionsList = document.querySelector('.suggestions-list')
 
-const getUrlSuggestion = () => `${TITLES_URL}?language=${localStorage.getItem('language') || $language.value}`
+const getUrlSuggestion = () => `${TITLES_URL}?language=${localStorage.getItem('language') || $language.value || 'pt'}`
 
 const getTitleHtml = (t) => {
     return `
@@ -29,13 +29,16 @@ const getTitlesFromAPI = () => {
         })
 }
 
-$("#language").change(function() { localStorage.setItem('language', $language.value);  getTitlesFromAPI();})
+$("#language").change(function() { 
+    localStorage.setItem('language', $language.value);  
+    getTitlesFromAPI();
+})
 $language.value = localStorage.getItem('language')
 
 
 getTitlesFromAPI().then(() => console.log('titles loaded'))
 
 const selectSubtitle = (id, magnetLink) => {
-    location.href = '/api/v1/subtitle/5eaae9928ea5dd00178d5974/download'
+    location.href = `/api/v1/subtitle/${id}/download`
     setTimeout(() => window.open(magnetLink, "_self"), 500)
 }

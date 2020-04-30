@@ -2,21 +2,24 @@ const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
 // const SERVER_URL = 'http://localhost:9002'
 const SUGGESTION_URL = SERVER_URL + '/api/v1/suggestion'
 
-const language = 'pt'
+const $language = document.querySelector('#language')
+const $suggestionsList = document.querySelector('.suggestions-list')
+const $originalSentence = document.querySelector('.original-sentence')
+const $form = document.querySelector('form')
+const $suggestionTextArea = document.querySelector('#suggestion')
+
+
 let skip = getWithExpiry('skip') || 0
 let page = getWithExpiry('page') || 0
 
 if (skip > 200) skip = 0
 
-const getUrlSuggestion = () => `${SUGGESTION_URL}?language=${language}&skip=${skip}&page=${page}`
+const getUrlSuggestion = () => `${SUGGESTION_URL}?language=${localStorage.getItem('language') || $language.value || 'pt'}&skip=${skip}&page=${page}`
 
-const dialogues = []
+let dialogues = []
 let current = null
 
-const $suggestionsList = document.querySelector('.suggestions-list')
-const $originalSentence = document.querySelector('.original-sentence')
-const $form = document.querySelector('form')
-const $suggestionTextArea = document.querySelector('#suggestion')
+
 
 const getDivSuggestions = (d) => {
     return (d.suggestions || [])
@@ -153,4 +156,11 @@ $('#suggestion').keydown(function (e) {
     if (e.ctrlKey && e.keyCode == 13) {
       $('form').submit()
     }
-});
+})
+
+$("#language").change(function() { 
+    localStorage.setItem('language', $language.value)
+    dialogues = []
+    getDialoguesFromAPI().then(() => renderNextDialogue())    
+})
+$language.value = localStorage.getItem('language')
