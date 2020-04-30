@@ -36,6 +36,25 @@ const getDialoguesToImproveSuggestions = async ({language, page, skip = 0 }) => 
     return Promise.resolve(dialogues)
 }
 
+const getDialoguesToEvaluateSuggestions = async ({language, page = 0 }) => {
+    console.info('Buscando legenda para avaliar sugestões')
+
+    const subtitle = await SubtitleModel
+        .aggregate([
+            { $match: {language, 'dialoguesMap.suggestions.1': { $exists: true}}},
+            { $unwind: '$dialoguesMap'},
+            { $match: {'dialoguesMap.suggestions.1': { $exists: true}}},
+            { $project: {dialoguesMap: {original: true, suggestions: true, _id: true}}},
+            { $sort: { createdAt: -1 }},
+            { $skip: parseInt(page) * 20},
+            { $limit: 20}
+        ])
+
+    const dialogues = subtitle.length ? subtitle.map(s => s.dialoguesMap) : []
+
+    return Promise.resolve(dialogues)
+}
+
 const getPage = (page = 0) => [0 + (page * 20), 20 + (page * 20)]
 
 // TODO: melhorar essa maneira de incrementar a votação, pode ter problema de concorrencia e performance
@@ -74,5 +93,6 @@ module.exports = {
     addSuggestion,
     getDialoguesToImproveSuggestions,
     upvoteOnSuggestion,
-    downvoteOnSuggestion
+    downvoteOnSuggestion,
+    getDialoguesToEvaluateSuggestions
 }
