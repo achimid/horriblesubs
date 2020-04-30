@@ -59,10 +59,11 @@ const getDialoguesFromAPI = () => {
         })
 }
 
-const renderNextDialogue = (d = dialogues.shift()) => {
+const renderNextDialogue = () => {
 
     if (!dialogues.length) getDialoguesFromAPI()
-
+    
+    const d = dialogues.shift()
     current = d
 
     $suggestionsList.innerHTML = getDivSuggestions(d)    
