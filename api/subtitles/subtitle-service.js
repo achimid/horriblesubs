@@ -117,15 +117,15 @@ const deleteSubtitlesUncompleted = () => {
 }
 
 const listAvailableTitles = async (query) => {
-    const titles = await SubtitleModel.aggregate([
-        { $match: query },
-        { $sort: { createdAt: -1 }},
-        { $group: { "_id": { name: "$name", episode: "$episode" } } },
-        { $limit : 20 }
-    ])
-    .skip(parseInt(query.page || 0))
+    const titles = await SubtitleModel
+        .find(query)
+        .select('fileName _id magnetLink')
+        .sort({ createdAt: -1 })
+        .limit(20)
+        .skip(parseInt(query.page || 0))
+        .lean()
 
-    return titles.map(t => { return { ...t._id, title: `${t._id.name} ${t._id.episode}`.replace(/ /g,"_")} })
+    return titles
 }
 
 module.exports = {

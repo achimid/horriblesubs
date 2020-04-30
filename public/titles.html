@@ -69,7 +69,9 @@
       <div class="container">
       	<div class="row justify-content-center mb-5 pb-3">
           <div class="col-md-7 text-center heading-section heading-section-white ftco-animate fadeInUp ftco-animated">
-            <span class="subheading">Community colaboration</span>
+            <span class="subheading">Community colaboration
+              
+            </span>
             <h2 class="mb-4">Help us improve our subtitles</h2>
             <p>Evaluate translation suggestions and choose the best by clicking on it. All collaboration is public and made by the anime-loving community.</p>
           </div>
@@ -78,9 +80,24 @@
         <div class="row block-9">
 
 
-          <div class="col-md-12 d-flex">
-            <div class="row d-flex contact-info mb-5 suggestions-list">
-              
+          <div class="col-md-12">
+            <div class="row contact-info mb-5 suggestions-list">
+              <div class="col-md-12 ftco-animate special-col">
+                <div class="box p-2 px-3 bg-light d-flex clickable">
+                    <div class="icon mr-3">
+                        <span class="icon-map-signs"></span>
+                    </div>
+                    <div> <p class="small-pad" >${sug.text}</p> </div>
+                </div>
+                
+                <div class="box p-2 px-3 bg-light d-flex clickable">
+                  <div class="icon mr-3">
+                      <span class="icon-map-signs"></span>
+                  </div>
+                  <div> <p class="small-pad" >${sug.text}</p> </div>
+                </div>
+
+            </div>  
             </div>
         </div>         
 
@@ -121,7 +138,7 @@
   <!-- <script src="js/google-map.js"></script> -->
   
   <script src="js/main.js"></script>
-  <script src="js/evaluate-api.js"></script>
+  <script src="js/titles-api.js"></script>
   <script src="js/web-push-client.js"></script>
     
   </body>
