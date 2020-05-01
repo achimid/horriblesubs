@@ -19,9 +19,12 @@ function onChangeLanguage() {
 }
 
 // TODO: Melhor e criar um botão para cada
-const onSelectSubtitle = (id, magnetLink) => {
+const onSelectSubtitle = (id) => {
     location.href = `/api/v1/subtitle/${id}/download`
-    setTimeout(() => window.open(magnetLink, "_self"), 500)
+}
+
+const onSelectLink = (magnetLink) => {
+    window.open(magnetLink, "_self")
 }
 
 
@@ -30,12 +33,20 @@ const onSelectSubtitle = (id, magnetLink) => {
 //  =============== FUNCTIONS ===============
 
 const buildDivTitle = (t) => {
-    return `
-        <div class="box p-2 px-3 bg-light d-flex clickable" onclick="onSelectSubtitle('${t._id}', '${t.magnetLink}')">
-            <div class="icon mr-3">
-                <span class="icon-map-signs"></span>
+    return `        
+        <div class="box p-2 px-3 bg-light d-flex hoverable">
+            <div class="d-flex box col-10">
+                <div class="icon mr-3">
+                    <span class="icon-map-signs"></span>
+                </div>
+                <div> <p class="small-pad" ><b>${t.fileName}</b></p> </div>
             </div>
-            <div> <p class="small-pad" >${t.fileName}</p> </div>
+            <div class="d-flex box col-1"  onclick="onSelectSubtitle('${t._id}')">
+                <button class="btn btn-outline-primary btn-sm">Subtitle</button>
+            </div>
+            <div class="d-flex box col-1"  onclick="onSelectLink('${t.magnetLink}')">
+                <button class="btn btn-outline-primary btn-sm">Torrent</button>
+            </div>
         </div>
     `
 }

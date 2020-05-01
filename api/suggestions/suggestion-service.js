@@ -37,7 +37,7 @@ const getDialoguesToImproveSuggestions = async ({language, page, skip = 0 }) => 
 }
 
 const getDialoguesToEvaluateSuggestions = async ({language, page = 0 }) => {
-    console.info('Buscando legenda para avaliar sugestões')
+    console.info('Buscando legenda para avaliar sugestões', {language, page})
 
     const subtitle = await SubtitleModel
         .aggregate([

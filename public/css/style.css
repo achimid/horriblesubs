@@ -9926,13 +9926,13 @@ textarea.form-control {
 }
 
 
-.clickable {
-  cursor: pointer;
+.hoverable {
+  /* cursor: pointer; */
   border: 4px solid #4b69bd;
 }
 
-.clickable:hover {
-  cursor: pointer;
+.hoverable:hover {
+  /* cursor: pointer; */
   border: 3px solid #33b8e0;
   overflow: hidden; 
 }
