@@ -18,7 +18,7 @@ $(".btn-next-dialogue").click(onSelectNext)
 
 
 
-//  ========== EVENTS FUNCTIONS ==============
+//  ============== EVENTS FUNCTIONS ==============
 function onKeyDownSuggestion (e) {
     if (e.ctrlKey && e.keyCode == 13) {
       $('form').submit()
@@ -36,10 +36,11 @@ function onSubmitForm (event) {
     if (!$suggestionTextArea.value) return
     
     const suggestionValue = $suggestionTextArea.value
-    current.suggestions.push({ text: suggestionValue })
+    const objSuggestion = { text: suggestionValue }
+    current.suggestions.push(objSuggestion)
     renderNextDialogue(current)
     
-    sendNewSuggestionAPI(current._id, suggestionValue).then(() => { setTimeout(renderNextDialogue, 250) })
+    sendNewSuggestionAPI(current._id, objSuggestion).then(() => { setTimeout(renderNextDialogue, 250) })
 
     $suggestionTextArea.value = ''
 }

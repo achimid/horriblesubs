@@ -181,17 +181,15 @@
 
 // ===============  CONSTANTS =============== 
 
-	// const SERVER_URL = 'https://horriblesubs-community.herokuapp.com'
-	const SERVER_URL = 'http://localhost:9002'
-	const SUGGESTION_URL = SERVER_URL + '/api/v1/suggestion'
-	const SUGGESTION_EVALUATE_URL = SERVER_URL + '/api/v1/suggestion/evaluate'
-	const TITLES_URL = SERVER_URL + '/api/v1/subtitle/titles'
+	const API = '/api/v1'
+	// const API = 'https://horriblesubs-community.herokuapp.com/api/v1'
+	// const API = 'http://localhost:9002/api/v1'
 
 
 
 // ===============  ENDPOINTS =============== 
 
-	const subscribeNotificationAPI = (subscription) => fetch('/api/v1/notification/subscribe',
+	const subscribeNotificationAPI = (subscription) => fetch(`${API}/notification/subscribe`,
 		{
 			method: 'POST',
 			body: JSON.stringify(subscription),
@@ -202,7 +200,7 @@
 
 
 
-	const upVoteAPI = (suggestionId) => fetch(SUGGESTION_URL + '/upvote/' + suggestionId, 
+	const upVoteAPI = (suggestionId) => fetch(`${API}/suggestion/upvote/${suggestionId}`, 
 		{ 
 			method: 'PUT', 
 			headers: { 'Content-Type': 'application/json' } 
@@ -211,7 +209,7 @@
 
 
 
-	const downVoteAPI = (suggestionId) => fetch(SUGGESTION_URL + '/downvote/' + suggestionId, 
+	const downVoteAPI = (suggestionId) => fetch(`${API}/suggestion/downvote/${suggestionId}`, 
 		{ 
 			method: 'PUT', 
 			headers: { 'Content-Type': 'application/json' } 
@@ -221,7 +219,7 @@
 
 
 
-	const getDialoguesToSuggestionAPI = (params) => fetch(buildURLParams('/api/v1/suggestion', params),
+	const getDialoguesToSuggestionAPI = (params) => fetch(buildURLParams(`${API}/suggestion`, params),
 		{ 
 			method: 'GET', 
 			headers: { 'Content-Type': 'application/json' } 
@@ -230,11 +228,35 @@
 	.then(data => data.json())
 	.catch(err => console.error('Erro ao buscar dialogos para sugestão', err))
 
-	const sendNewSuggestionAPI = (id, body) => fetch(SUGGESTION_URL + '/' + id, 
+
+
+	const sendNewSuggestionAPI = (id, body) => fetch(`${API}/suggestion/${id}`, 
         { 
 			method: 'PUT', 
 			body: JSON.stringify(body), 
 			headers: { 'Content-Type': 'application/json' }
 		}
 	)
+	.catch(err => console.error('Erro ao enviar nova sugestão', err))
 	
+
+
+	const getLastTitlesReleasedAPI = (params) => fetch(buildURLParams(`${API}/subtitle/titles`, params),
+		{ 
+			method: 'GET', 
+			headers: { 'Content-Type': 'application/json' } 
+		}
+	)
+	.then(data => data.json())
+	.catch(err => console.error('Erro ao buscar titulos', err))
+
+
+
+	const getDialoguesSuggestionToEvaluateAPI = (params) => fetch(buildURLParams(`${API}/suggestion/evaluate`, params),
+		{ 
+			method: 'GET', 
+			headers: { 'Content-Type': 'application/json' } 
+		}
+	)
+	.then(data => data.json())
+	.catch(err => console.error('Erro ao buscar sugestão para avaliar', err))

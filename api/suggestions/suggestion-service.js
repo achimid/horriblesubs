@@ -21,7 +21,7 @@ const addSuggestion = async (dialogueId, { suggestion }) => {
 }
 
 const getDialoguesToImproveSuggestions = async ({language, page, skip = 0 }) => {
-    console.info('Buscando legenda para sugerir')
+    console.info('Buscando legenda para sugerir', {language, page, skip})
 
     const subtitle = await SubtitleModel
         .find({language}, { dialoguesMap: { $slice: getPage(page)} })

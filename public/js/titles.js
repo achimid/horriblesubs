@@ -1,13 +1,37 @@
 
-
+// ============== ELEMENTS ==============
 const $language = document.querySelector('#language')
 const $suggestionsList = document.querySelector('.suggestions-list')
 
-const getUrlSuggestion = () => `${TITLES_URL}?language=${localStorage.getItem('language') || $language.value || 'pt'}`
 
-const getTitleHtml = (t) => {
+
+
+// ============== EVENTS ==============
+$("#language").change(onChangeLanguage)
+
+
+
+
+//  ============== EVENTS FUNCTIONS ==============
+function onChangeLanguage() { 
+    localStorage.setItem('language', $language.value)
+    getTitlesFromAPI()
+}
+
+// TODO: Melhor e criar um botão para cada
+const onSelectSubtitle = (id, magnetLink) => {
+    location.href = `/api/v1/subtitle/${id}/download`
+    setTimeout(() => window.open(magnetLink, "_self"), 500)
+}
+
+
+
+
+//  =============== FUNCTIONS ===============
+
+const buildDivTitle = (t) => {
     return `
-        <div class="box p-2 px-3 bg-light d-flex clickable" onclick="selectSubtitle('${t._id}', '${t.magnetLink}')">
+        <div class="box p-2 px-3 bg-light d-flex clickable" onclick="onSelectSubtitle('${t._id}', '${t.magnetLink}')">
             <div class="icon mr-3">
                 <span class="icon-map-signs"></span>
             </div>
@@ -15,27 +39,26 @@ const getTitleHtml = (t) => {
         </div>
     `
 }
-
-const getTitlesFromAPI = () => {
-    return fetch(getUrlSuggestion())
-        .then(data => data.json())
-        .then(json => {
-            $suggestionsList.innerHTML = ''
-            const htmlInject = json.titles.map(getTitleHtml).join('')
-            $suggestionsList.innerHTML = htmlInject
-        })
+const getQueryParams = () => {
+    return { language: localStorage.getItem('language') || $language.value || 'pt' }
 }
 
-$("#language").change(function() { 
-    localStorage.setItem('language', $language.value);  
-    getTitlesFromAPI();
-})
+const onReceiveTitles = (titles) => {
+    $suggestionsList.innerHTML = ''
+    $suggestionsList.innerHTML = titles.map(buildDivTitle).join('')
+}
+
+const getTitlesFromAPI = () => getLastTitlesReleasedAPI(getQueryParams()).then(json => onReceiveTitles(json.titles))
+
+
+
+
+
+
+//  ==================== INIT =================
+getTitlesFromAPI().then(() => console.log('Titles loaded'))
 $language.value = localStorage.getItem('language')
 
 
-getTitlesFromAPI().then(() => console.log('titles loaded'))
 
-const selectSubtitle = (id, magnetLink) => {
-    location.href = `/api/v1/subtitle/${id}/download`
-    setTimeout(() => window.open(magnetLink, "_self"), 500)
-}
+
