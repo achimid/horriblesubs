@@ -2,6 +2,7 @@ const fetch = require('node-fetch')
 const { onExtractionDone } = require('./subtitle-socket-client')
 const PQueue = require('../utils/promise-queue')
 const SubtitleModel = require('./subtitle-model')
+const NotificationService = require('../notification/notification-service')
 
 const langsToTranslateByDefault = process.env.DEFAULT_LANGUAGES_TRANSLATION.split('|')
 
@@ -54,6 +55,8 @@ const whenExtractionDone = (subtitleId) => async ({body}) => {
  
     subOriginal.remove()
 
+
+    NotificationService.sendNotificationNewSubtitle(subtitles[0])
 }
 
 const getAndParseSubtitlesBody = (b, subtitle) => {
