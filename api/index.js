@@ -14,7 +14,8 @@ const statup = require('./config/startup')
 app.use(cors())
 app.use(compression())
 app.use(express.json())
-app.use(express.static('public', { maxAge: 7*86400000 }))
+app.use(express.static('public', { maxAge: 7*86400000, extensions:['html'] }))
+// app.use(express.static('public', { extensions:['html'] }))
 
 app.disable('x-powered-by')
 
