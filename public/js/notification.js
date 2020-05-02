@@ -46,6 +46,6 @@ function registerNotification() {
 }
 
 
-navigator.serviceWorker.getRegistrations(location.href).then(registrations => { 
-  if (registrations.length == 0) registerNotification() 
-})
+// navigator.serviceWorker.getRegistrations(location.href).then(registrations => { 
+//   if (registrations.length == 0) registerNotification() 
+// })
