@@ -21,6 +21,21 @@ const newSubtitleNotification = (subtitle) => (subscription) => {
     webpush.sendNotification(subscription, JSON.stringify(payload)).catch(error => { console.error(error.stack) })
 }
 
+// const newSuggestionNotification = (subtitle) => (subscription) => {
+//     const payload = {
+//         title: "Help up evaluating!",
+//         body: "Hi! -> Olá!",
+//         icon: 'https://horriblesubs-community.herokuapp.com/icon/android-chrome-192x192.png',
+//         data: '5ea9bcdbeaf855229cd0ac2f',
+//         actions: [  
+//             {action: 'ok', title: '👍 OK'},
+//             {action: 'nok', title: '👎 Not OK'}
+//         ]  
+//     }
+  
+//     webpush.sendNotification(subscription, JSON.stringify(payload)).catch(error => { console.error(error.stack) })
+// }
+
 const sendNotificationNewSubtitle = async (subtitle) => {
     console.info('Enviando notificação de novo anime disponivel', subtitle.fileName)
     
