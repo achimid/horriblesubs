@@ -18,7 +18,8 @@ const newSubtitleNotification = (subtitle) => (subscription) => {
         // ]  
     }
   
-    webpush.sendNotification(subscription, JSON.stringify(payload)).catch(error => { console.error(error.stack) })
+    webpush.sendNotification(subscription, JSON.stringify(payload))
+        .catch(error => { console.info("Não foi possivel efetuar notificação") })
 }
 
 // const newSuggestionNotification = (subtitle) => (subscription) => {

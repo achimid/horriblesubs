@@ -1,24 +1,17 @@
-const socket = global.socket
-const connectionsId = []
+const onConnect = (socket) => console.info(`Socket client ${socket.id} conectado...`)
 
-const CHANELS = {
-    CLIENT_DOWNLOAD: 'CLIENT_DOWNLOAD'
+const onDisconnect = (socket) => () => console.info(`Socket client ${socket.id} desconectado...`)
+
+const registerSocketEvents = (io) => io.on('connection', (socket) => {
+    onConnect(socket)
+    socket.on('disconnect', onDisconnect(socket))
+})
+
+const notifySocket = async (data) => {
+    global.socket.emit('NEW_SUBTITLE', { magnetLink, })
 }
-
-const socketInit = () => {
-    console.info('Iniciando sockets...')
-    
-    socket.on('connection', (client) => {
-        console.log('Client conectado...', client.id)
-        connectionsId.push(client.id)
-        client.on('disconnect', () => console.log('Client desconectado...'))
-    })
-}
-
 
 module.exports = {
-    CHANELS,
-    socket,
-    connectionsId,
-    socketInit
+    registerSocketEvents,
+    notifySocket
 }

@@ -16,3 +16,4 @@
 # Usar LoadBalancer?
 # Corrigir problema do tamanho da lagenda
 # Gerar uma pagina ou algumas statisticas de quantas legendas e sugestões estão sendo feitas por minuto....
+# Tentar fazer aquele client, para que seja possivel baixar os animes automaticamente e selecionar o que você quer baixar, e ele usa o torrent e build a legenda depois de baixado.

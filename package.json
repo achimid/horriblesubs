@@ -4,7 +4,8 @@
   "description": "API to centralize animes subtitles and plugins from web site https://horriblesubs.info/",
   "main": "index.js",
   "scripts": {
-    "start": "node api/index.js"
+    "start": "node api/index.js",
+    "cluster": "node api/index-cluster.js"
   },
   "repository": {
     "type": "git",
