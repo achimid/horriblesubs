@@ -1,6 +1,6 @@
 const SubtitleModel = require('../subtitles/subtitle-model')
 
-const addSuggestion = async (dialogueId, { suggestion }) => {
+const addSuggestion = async (dialogueId, { text }) => {
     console.info('Adicionando nova sugestão')
 
     const subtitle = await SubtitleModel.findOne({'dialoguesMap._id': dialogueId})
@@ -8,7 +8,7 @@ const addSuggestion = async (dialogueId, { suggestion }) => {
     const suggestions = dialogue.suggestions
 
     // Adiciona a sugestão
-    suggestions.unshift({ text: suggestion })
+    suggestions.unshift({ text })
     dialogue.suggestions = [...(new Set(suggestions))]
 
     // Build do conteudo
