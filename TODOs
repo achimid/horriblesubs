@@ -17,3 +17,12 @@
 # Corrigir problema do tamanho da lagenda
 # Gerar uma pagina ou algumas statisticas de quantas legendas e sugestões estão sendo feitas por minuto....
 # Tentar fazer aquele client, para que seja possivel baixar os animes automaticamente e selecionar o que você quer baixar, e ele usa o torrent e build a legenda depois de baixado.
+
+
+# HorribleSubCommunity
+* Extrair projeto do fronted
+* Renomear repositorio
+* Mudar o nome para AutoSubs Fansub (ASF)
+* Verificar se o dominio esta disponivel (autosubs.org)
+* Comprar o dominio
+* Implementar correções de legenda de uma maneira hierarquica, porque as correções dependen da linguagem, usa uma factory...
