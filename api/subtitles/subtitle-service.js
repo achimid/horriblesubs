@@ -68,7 +68,7 @@ const getAndParseSubtitlesBody = (b, subtitle) => {
                 magnetLink: subtitle.magnetLink,
                 episode: subtitle.episode,
                 pageUrl: subtitle.pageUrl,
-                fileName: sub.fileName,
+                fileName: fileNameReplaces(sub.fileName),
                 content: t.content,
                 language: t.to,
                 dialoguesMap: t.dialoguesMap.map(m => {
@@ -129,6 +129,12 @@ const listAvailableTitles = async (query) => {
         .lean()
 
     return titles
+}
+
+const fileNameReplaces = (fileName) => {
+    return fileName
+        .replace(new RegExp('\\[HorribleSubs\\]', "ig"), '[AutoSubs]')
+        .replace(new RegExp('\\.[0-9]\\.', "ig"), '.')
 }
 
 module.exports = {
