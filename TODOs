@@ -1,28 +1,14 @@
 
 # Melhorar a estrategis de notificação para nao receber tudo e fazer a notificação de sugestão.
 # modificar a maneira com que as sugestões estão armazenadas e manipuladas, verificar a possibilidade de extrair para um modelo
-# Criar pagina About e FAQ
 # Criar swagger na api? - se sim, export ela no rodapé da pagina
-# Escrever documentação do READ.me
+# Escrever documentação do READ.ME
 # Desregistrar as notificações e limpar aquelas que nao deram certo depois de uma certa quantidade de erros.
-# Comprar dominio
-# Configurar Analitics e o Search
-# Linkar as outras aplicações para esse site
-# Colocar em Servidor de Prod
-# Colocar em DB de Prod
+
 # Monitorar tempo de resposta dos endpoints - Adicionar monitoramento
 # Melhora Logs da aplicação
 # Melhorar decrição do plugin, fazer uma explicação melhor
-# Usar LoadBalancer?
-# Corrigir problema do tamanho da lagenda
-# Gerar uma pagina ou algumas statisticas de quantas legendas e sugestões estão sendo feitas por minuto....
+
 # Tentar fazer aquele client, para que seja possivel baixar os animes automaticamente e selecionar o que você quer baixar, e ele usa o torrent e build a legenda depois de baixado.
 
-
-# HorribleSubCommunity
-* Extrair projeto do fronted
-* Renomear repositorio
-* Mudar o nome para AutoSubs Fansub (ASF)
-* Verificar se o dominio esta disponivel (autosubs.org)
-* Comprar o dominio
 * Implementar correções de legenda de uma maneira hierarquica, porque as correções dependen da linguagem, usa uma factory...
