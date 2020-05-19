@@ -1,15 +1,20 @@
 const fetch = require('node-fetch')
 const { onExtractionDone } = require('./subtitle-socket-client')
-const PQueue = require('../utils/promise-queue')
 const SubtitleModel = require('./subtitle-model')
 const NotificationService = require('../notification/notification-service')
 
 const langsToTranslateByDefault = process.env.DEFAULT_LANGUAGES_TRANSLATION.split('|')
 
+let cur = 0
+const SERVERS = process.env.MKV_EXTRACT_API_URLS.split(',')
+const PATH = process.env.MKV_EXTRACT_API_URI
+
 const sendExtractionRequest = (body) => {
         console.info('Enviando para extração...')
 
-        return fetch(process.env.MKV_EXTRACT_API + process.env.MKV_EXTRACT_API_URI, 
+        const URL = SERVERS[(cur + 1) % SERVERS.length]
+        cur = (cur + 1) % SERVERS.length
+        return fetch(`${URL}${PATH}`, 
         { method: 'post', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' }})
     }
 
@@ -18,12 +23,10 @@ const sendExtraction = (magnetLink, subtitleId) => {
 
     const body = { magnetLink, langsTo: langsToTranslateByDefault, ignoreCache: 'false' }
     
-    const promiseSend = () => {
-        return sendExtractionRequest(body)
-            .then(res => res.json())
-            .then(extraction => onExtractionDone(extraction, whenExtractionDone(subtitleId)))
-    }
-    PQueue.push(promiseSend)
+    return sendExtractionRequest(body)
+        .then(res => res.json())
+        .then(extraction => onExtractionDone(extraction, whenExtractionDone(subtitleId)))
+    
 }
 
 const onNotificationRecieve = async (data) => {
@@ -32,7 +35,7 @@ const onNotificationRecieve = async (data) => {
     
     const { name, episode, pageUrl } = subtileBody
     const finded = await SubtitleModel.findOne({name, episode, pageUrl, content: { $exists: true } })
-    if (finded) return Promise.resolve()
+    // if (finded) return Promise.resolve()
 
     const subtitle = new SubtitleModel(subtileBody)    
     subtitle.save()
@@ -43,9 +46,6 @@ const onNotificationRecieve = async (data) => {
 const whenExtractionDone = (subtitleId) => async ({body}) => {
     console.info('Evento de download completo recebido', subtitleId)
     
-    // Chamada para executar a proxima extração enfileirada
-    PQueue.execNext()
-
     const subOriginal = await SubtitleModel.findById(subtitleId)
     
     const subtitles = getAndParseSubtitlesBody(body, subOriginal)
