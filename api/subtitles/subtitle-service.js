@@ -10,19 +10,17 @@ const SERVERS = process.env.MKV_EXTRACT_API_URLS.split(',')
 const PATH = process.env.MKV_EXTRACT_API_URI
 
 const sendExtractionRequest = (body) => {
-        console.info('Enviando para extração...')
 
         const URL = SERVERS[(cur + 1) % SERVERS.length]
         cur = (cur + 1) % SERVERS.length
-        console.log(`Enviando extração.... ${URL}`)
+        console.log(`Enviando para extração.... ${URL}`)
 
         return fetch(`${URL}${PATH}`, 
             { method: 'post', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' }})
     }
 
 const sendExtraction = (magnetLink, subtitleId) => {
-    console.info('Enfileirando para extração...')
-
+    
     const body = { magnetLink, langsTo: langsToTranslateByDefault, ignoreCache: 'false' }
     
     return sendExtractionRequest(body)
