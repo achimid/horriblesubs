@@ -20,7 +20,7 @@ const sendExtractionRequest = (body) => {
     }
 
 const sendExtraction = (magnetLink, subtitleId) => {
-    
+
     const body = { magnetLink, langsTo: langsToTranslateByDefault, ignoreCache: 'false' }
     
     return sendExtractionRequest(body)
@@ -34,8 +34,10 @@ const onNotificationRecieve = async (data) => {
     subtileBody.pageUrl = subtileBody.pageUrl.split('#')[0]
     
     const { name, episode, pageUrl } = subtileBody
+    console.info('Nova extraction recebida...', name, episode)
+
     const finded = await SubtitleModel.findOne({name, episode, pageUrl, content: { $exists: true } })
-    // if (finded) return Promise.resolve()
+    if (finded) return Promise.resolve()
 
     const subtitle = new SubtitleModel(subtileBody)    
     subtitle.save()
