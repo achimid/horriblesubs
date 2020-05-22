@@ -10,5 +10,4 @@
 # Melhorar decrição do plugin, fazer uma explicação melhor
 
 # Tentar fazer aquele client, para que seja possivel baixar os animes automaticamente e selecionar o que você quer baixar, e ele usa o torrent e build a legenda depois de baixado.
-
-* Implementar correções de legenda de uma maneira hierarquica, porque as correções dependen da linguagem, usa uma factory...
+# Criar catalogos de animes...

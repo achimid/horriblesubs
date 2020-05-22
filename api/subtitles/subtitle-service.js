@@ -21,7 +21,7 @@ const sendExtractionRequest = (body) => {
 
 const sendExtraction = (magnetLink, subtitleId) => {
 
-    const body = { magnetLink, langsTo: langsToTranslateByDefault, ignoreCache: 'true' }
+    const body = { magnetLink, langsTo: langsToTranslateByDefault, ignoreCache: 'false' }
     
     return sendExtractionRequest(body)
         .then(res => res.json())
