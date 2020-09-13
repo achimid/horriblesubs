@@ -7,6 +7,6 @@ module.exports = {
         useFindAndModify: false
     },
     strategy: 'size',
-    helthcheck: { interval: 3600 * 1000 },
+    helthcheck: { interval: 60000 * 5 },
     log: true
 }
