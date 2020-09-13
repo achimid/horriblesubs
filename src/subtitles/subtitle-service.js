@@ -30,7 +30,7 @@ const sendExtraction = (magnetLink, subtitleId) => {
 }
 
 const onNotificationRecieve = async (data) => {
-    const subtileBody = JSON.parse(data.lastExecution.extractedTarget)
+    const subtileBody = JSON.parse(data.extractedContent[6])
     subtileBody.pageUrl = subtileBody.pageUrl.split('#')[0]
     
     const { name, episode, pageUrl } = subtileBody
@@ -39,7 +39,7 @@ const onNotificationRecieve = async (data) => {
     const finded = await SubtitleModel.findOne({name, episode, pageUrl, content: { $exists: true } })
     if (finded) return Promise.resolve()
 
-    const subtitle = new SubtitleModel(subtileBody)    
+    const subtitle = SubtitleModel.get(subtileBody)    
     subtitle.save()
         .then(() => sendExtraction(subtitle.magnetLink, subtitle._id))    
         .catch(() => console.info('Erro tentando salvar legenda duplicada', subtitle))
@@ -102,34 +102,36 @@ const findByQuery = (data) => {
         name: data.name,
         episode: data.episode,
         magnetLink: data.magnetLink,
-        pageUrl: {
-            $in: [data.pageUrl, data.pageUrl.split('#')[0]]
-        },
         fileName: data.fileName,
         language: { $exists: true } 
     }
 
+    if (data.pageUrl) {
+        query.pageUrl = { $in: [data.pageUrl, data.pageUrl.split('#')[0]] }
+    }
+
     Object.keys(query).forEach((key) => (query[key] == null) && delete query[key])
 
-    return SubtitleModel.find(query).select('episode language name').sort('name episode language').lean()
+    return SubtitleModel.many(Model => Model.find(query).select('episode language name').sort('name episode language').lean())
 }
 
-const findById = (id) => SubtitleModel.findById(id).select('episode language name content fileName').lean()
+const findById = (id) => SubtitleModel.one(Model => Model.findById(id).select('episode language name content fileName').lean())
 
 const deleteSubtitlesUncompleted = () => {
     console.info('Removendo legendas incompletas...')
-    SubtitleModel.deleteMany({content: { $exists: false}}).exec()
+    SubtitleModel.deleteMany({content: { $exists: false}})
 }
 
-const listAvailableTitles = async (query) => {
-    const titles = await SubtitleModel
-        .find(query)
-        .select('fileName _id magnetLink')
-        .sort({ createdAt: -1 })
-        .limit(20)
-        .skip(parseInt(query.page || 0))
-        .lean()
+const findAvailableTitles = (query) => Model => Model.find(query)
+    .select('fileName _id magnetLink')
+    .sort({ createdAt: -1 })
+    .limit(20)
+    .skip(parseInt(query.page || 0))
+    .lean()
 
+
+const listAvailableTitles = async (query) => {
+    const titles = await SubtitleModel.many(findAvailableTitles(query))    
     return titles
 }
 

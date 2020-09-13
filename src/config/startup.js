@@ -1,9 +1,7 @@
-const databaseInit = require('./database')
-const { registerSocketEvents } = require('../utils/socket-util')
+// const { registerSocketEvents } = require('../utils/socket-util')
 const { deleteSubtitlesUncompleted } = require('../subtitles/subtitle-service')
 
-const init = () => {
-    databaseInit()
+const init = () => {    
     // registerSocketEvents()
     deleteSubtitlesUncompleted()
 }

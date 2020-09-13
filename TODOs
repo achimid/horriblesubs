@@ -11,3 +11,6 @@
 
 # Tentar fazer aquele client, para que seja possivel baixar os animes automaticamente e selecionar o que você quer baixar, e ele usa o torrent e build a legenda depois de baixado.
 # Criar catalogos de animes...
+
+# Criar endpoint que lista todos os animes ja cadastrados (distinct)
+# Criar endpoint para recuperar/filtrar legenda especifica

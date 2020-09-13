@@ -4,7 +4,7 @@ const SubscriptionModel = require('./subscription-model')
 webpush.setVapidDetails(process.env.EMAIL, process.env.PUBLIC_VAPID_KEY, process.env.PRIVATE_VAPID_KEY)
 
 
-const create = (subscription) => new SubscriptionModel(subscription).save()
+const create = (subscription) => SubscriptionModel.create(subscription)
 
 const newSubtitleNotification = (subtitle) => (subscription) => {
     const payload = {
@@ -40,7 +40,7 @@ const newSubtitleNotification = (subtitle) => (subscription) => {
 const sendNotificationNewSubtitle = async (subtitle) => {
     console.info('Enviando notificação de novo anime disponivel', subtitle.fileName)
     
-    const subscriptions = await SubscriptionModel.find().lean()
+    const subscriptions = await SubscriptionModel.findAllLean()
     subscriptions.map(newSubtitleNotification(subtitle))
 }
 

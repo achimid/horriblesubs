@@ -1,5 +1,6 @@
-const mongoose = require("mongoose")
 const os = require('os')
+const config = require('../config/database-config')
+const mongoose = require('../config/mongoose-multi-db')
 
 const LINE_SEPARATOR = os.EOL
 const SUBTITLE_PART = 9
@@ -58,5 +59,4 @@ function replaceLastPart(newPart, string) {
 }
 
 
-const Extraction = mongoose.model("subtitles", schema)  
-module.exports = Extraction
+module.exports = mongoose.model('subtitles', schema, config)

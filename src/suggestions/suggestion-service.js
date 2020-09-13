@@ -3,7 +3,7 @@ const SubtitleModel = require('../subtitles/subtitle-model')
 const addSuggestion = async (dialogueId, { text }) => {
     console.info('Adicionando nova sugestão')
 
-    const subtitle = await SubtitleModel.findOne({'dialoguesMap._id': dialogueId})
+    const subtitle = await SubtitleModel.findOne({ 'dialoguesMap._id': dialogueId })
     const dialogue = subtitle.dialoguesMap.filter(({_id}) => _id == dialogueId)[0]
     const suggestions = dialogue.suggestions
 
@@ -20,16 +20,18 @@ const addSuggestion = async (dialogueId, { text }) => {
     return Promise.resolve(dialogue.suggestions)
 }
 
+
 const getDialoguesToImproveSuggestions = async ({language, page, skip = 0 }) => {
     console.info('Buscando legenda para sugerir', {language, page, skip})
 
-    const subtitle = await SubtitleModel
-        .find({language}, { dialoguesMap: { $slice: getPage(page)} })
+    const subtitle = await SubtitleModel.many(Model =>
+        Model.find({language}, { dialoguesMap: { $slice: getPage(page)} })
         .select('dialoguesMap.original dialoguesMap.suggestions dialoguesMap._id')
         .sort({ createdAt: -1 })
         .limit(1)
         .skip(parseInt(skip))
         .lean()
+    )
     
     const dialogues = subtitle.length ? subtitle[0].dialoguesMap : []
 
@@ -39,8 +41,9 @@ const getDialoguesToImproveSuggestions = async ({language, page, skip = 0 }) => 
 const getDialoguesToEvaluateSuggestions = async ({language, page = 0 }) => {
     console.info('Buscando legenda para avaliar sugestões', {language, page})
 
-    const subtitle = await SubtitleModel
-        .aggregate([
+// TODO: Acho que o agregate não funciona muito bem com o multi-mongo-db
+    const subtitle = await SubtitleModel.many(Model =>
+        Model.aggregate([
             { $match: {language, 'dialoguesMap.suggestions.1': { $exists: true}}},
             { $unwind: '$dialoguesMap'},
             { $match: {'dialoguesMap.suggestions.1': { $exists: true}}},
@@ -49,6 +52,7 @@ const getDialoguesToEvaluateSuggestions = async ({language, page = 0 }) => {
             { $skip: parseInt(page) * 20},
             { $limit: 20}
         ])
+    )
 
     const dialogues = subtitle.length ? subtitle.map(s => s.dialoguesMap) : []
 
@@ -62,7 +66,7 @@ const upvoteOnSuggestion = async (suggestionId) => {
 
     console.time('upvote')
 
-    const subtitle = await SubtitleModel.findOne({'dialoguesMap.suggestions._id': suggestionId})
+    const subtitle = await SubtitleModel.findOne({ 'dialoguesMap.suggestions._id': suggestionId })
     const suggestion = subtitle.dialoguesMap.map(d => d.suggestions.filter(s => s.id == suggestionId)).flat()[0]
 
     suggestion.upVote++
@@ -75,9 +79,10 @@ const upvoteOnSuggestion = async (suggestionId) => {
 // TODO: melhorar essa maneira de incrementar a votação, pode ter problema de concorrencia e performance
 const downvoteOnSuggestion = async (suggestionId) => {
 
+
     console.time('downvote')
 
-    const subtitle = await SubtitleModel.findOne({'dialoguesMap.suggestions._id': suggestionId})
+    const subtitle = await SubtitleModel.findOne({ 'dialoguesMap.suggestions._id': suggestionId })
     const suggestion = subtitle.dialoguesMap.map(d => d.suggestions.filter(s => s.id == suggestionId)).flat()[0]
 
     suggestion.upVote--
