@@ -30,7 +30,14 @@ const sendExtraction = (magnetLink, subtitleId) => {
 }
 
 const onNotificationRecieve = async (data) => {
-    const subtileBody = JSON.parse(data.extractedContent[6])
+    let subtileBody
+    
+    try {
+        subtileBody = JSON.parse(data.extractedContent[6])  // Notify Service
+    } catch (e) {
+        subtileBody = JSON.parse(data.lastExecution.extractedTarget)  // Plugin
+    }
+
     subtileBody.pageUrl = subtileBody.pageUrl.split('#')[0]
     
     const { name, episode, pageUrl } = subtileBody
